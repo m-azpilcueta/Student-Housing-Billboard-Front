@@ -32,4 +32,16 @@ export default {
     await sleep(1000);
     return await HTTP.delete(`${resource}/${id}`);
   },
+
+  async saveImage(id, file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    return (
+      await HTTP.post(`${resource}/${id}/image`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+    ).data;
+  },
 };
