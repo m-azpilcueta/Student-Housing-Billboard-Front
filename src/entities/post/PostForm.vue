@@ -10,6 +10,8 @@
           <v-select v-model="post.tags" :items="tags" item-text="name" label="Tags" return-object multiple></v-select>
 
           <v-textarea v-model="post.body" label="Body" rows="7" :rules="requiredField"></v-textarea>
+          <input type="file" ref="hiddenUploader" class="d-none" />
+          <v-btn block text @click="uploadImage()"> Seleccionar imagen </v-btn>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -53,6 +55,9 @@ export default {
       }
       try {
         const savedPost = await PostRepository.save(this.post);
+        if (this.$refs.hiddenUploader.files[0]) {
+          await PostRepository.saveImage(savedPost.id, this.$refs.hiddenUploader.files[0]);
+        }
         this.$router.replace({
           name: "PostDetail",
           params: { id: savedPost.id },
@@ -70,6 +75,9 @@ export default {
     },
     back() {
       this.$router.go(-1);
+    },
+    uploadImage() {
+      this.$refs.hiddenUploader.click();
     },
   },
 };

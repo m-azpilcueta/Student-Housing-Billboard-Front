@@ -2,7 +2,7 @@
   <v-container>
     <v-row>
       <v-col cols="12" v-if="loading" class="loading">Loading...</v-col>
-      <v-col cols="8" offset="2" v-if="post">
+      <v-col cols="6" offset="2" v-if="post">
         <v-card>
           <v-card-title>
             <span>{{ post.title }}</span>
@@ -27,6 +27,9 @@
             <v-btn @click="back()"> Back </v-btn>
           </v-card-actions>
         </v-card>
+      </v-col>
+      <v-col cols="4" v-if="post">
+        <v-img :src="imageSrc"></v-img>
       </v-col>
     </v-row>
   </v-container>
@@ -59,6 +62,12 @@ export default {
   computed: {
     tagsAsString() {
       return this.post.tags.map((t) => t.name).join(", ");
+    },
+    imageSrc() {
+      if (this.post.hasImage) {
+        return `http://localhost:8080/api/posts/${this.post.id}/image`;
+      }
+      return "/placeholder.png";
     },
   },
   methods: {
