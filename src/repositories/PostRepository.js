@@ -3,11 +3,13 @@ import HTTP from "@/common/http";
 const resource = "posts";
 
 export default {
-  async findAll(query) {
+  async findAll(query, sort) {
+    const params = new URLSearchParams();
+    if (query) params.append("query", query);
+    if (sort) params.append("sort", sort);
+    const paramsStr = params.toString();
     let url = resource;
-    if (query) {
-      url += `?query=${query}`;
-    }
+    if (paramsStr) url += "?" + paramsStr;
     const response = await HTTP.get(url);
     return response.data;
   },

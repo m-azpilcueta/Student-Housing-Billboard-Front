@@ -51,7 +51,7 @@ export default {
       delay = setTimeout(this.fetchData, 500);
     },
     async fetchData() {
-      this.posts = await PostRepository.findAll(this.query);
+      this.posts = await PostRepository.findAll(this.query, this.sort);
     },
   },
 };
