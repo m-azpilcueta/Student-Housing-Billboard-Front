@@ -3,8 +3,12 @@ import HTTP from "@/common/http";
 const resource = "posts";
 
 export default {
-  async findAll() {
-    const response = await HTTP.get(resource);
+  async findAll(query) {
+    let url = resource;
+    if (query) {
+      url += `?query=${query}`;
+    }
+    const response = await HTTP.get(url);
     return response.data;
   },
 

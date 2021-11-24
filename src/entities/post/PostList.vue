@@ -3,6 +3,7 @@
     <v-row>
       <v-col cols="12" class="text-center">
         <div class="right-buttons-bar">
+          <v-text-field v-model="query" label="Filter posts" class="d-inline-block" @input="fetchData()"></v-text-field>
           <v-btn :to="{ name: 'PostCreate' }" color="primary">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
@@ -25,11 +26,17 @@ export default {
   data() {
     return {
       posts: [],
+      query: null,
     };
   },
   components: { PostCard },
-  async mounted() {
-    this.posts = await PostRepository.findAll();
+  mounted() {
+    this.fetchData();
+  },
+  methods: {
+    async fetchData() {
+      this.posts = await PostRepository.findAll(this.query);
+    },
   },
 };
 </script>
