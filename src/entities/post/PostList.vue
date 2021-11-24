@@ -3,7 +3,7 @@
     <v-row>
       <v-col cols="12" class="text-center">
         <div class="right-buttons-bar">
-          <v-text-field v-model="query" label="Filter posts" class="d-inline-block" @input="fetchData()"></v-text-field>
+          <v-text-field v-model="query" label="Filter posts" class="d-inline-block" @input="updateData()"></v-text-field>
           <v-btn :to="{ name: 'PostCreate' }" color="primary">
             <v-icon>mdi-plus</v-icon>
           </v-btn>
@@ -22,6 +22,8 @@
 import PostCard from "./PostCard.vue";
 import PostRepository from "@/repositories/PostRepository";
 
+let delay = null;
+
 export default {
   data() {
     return {
@@ -34,6 +36,10 @@ export default {
     this.fetchData();
   },
   methods: {
+    updateData() {
+      clearTimeout(delay);
+      delay = setTimeout(this.fetchData, 500);
+    },
     async fetchData() {
       this.posts = await PostRepository.findAll(this.query);
     },
