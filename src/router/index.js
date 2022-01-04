@@ -2,7 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import auth from "@/common/auth";
 import store from "@/common/store";
-import { NotFound, Login, Home } from "@/components";
+import { NotFound, Login, Home, Register } from "@/components";
 import postRouter from "@/entities/post/post.router.js";
 
 const user = store.state.user;
@@ -20,6 +20,12 @@ const routes = [
     path: "/",
     name: "Home",
     component: Home,
+    meta: { public: true },
+  },
+  {
+    path: "/register",
+    name: "Register",
+    component: Register,
     meta: { public: true },
   },
   { path: "*", component: NotFound, meta: { public: true } },
