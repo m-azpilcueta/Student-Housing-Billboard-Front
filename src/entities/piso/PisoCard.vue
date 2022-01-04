@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-img :src="cargarPortada(piso)"></v-img>
-    <v-icon size="25" class="favoritos" color="red darken-2" v-if="isLogged">mdi-heart-outline</v-icon>
+    <v-icon size="25" class="favoritos" color="red darken-2" v-if="isLogged & isDisponible">mdi-heart-outline</v-icon>
     <v-card-title>
       {{ piso.nombre }}
     </v-card-title>
@@ -23,6 +23,9 @@
       </v-card-subtitle>
       <v-card-title>{{ piso.importe }}€</v-card-title>
     </div>
+    <div class="no-disp d-flex justify-center align-center" v-if="!isDisponible">
+      <v-card-title>Piso no disponible</v-card-title>
+    </div>
   </v-card>
 </template>
 
@@ -40,6 +43,9 @@ export default {
   computed: {
     isLogged() {
       return store.state.user.logged;
+    },
+    isDisponible() {
+      return this.piso.disponible;
     },
   },
   methods: {
@@ -62,5 +68,15 @@ export default {
   top: 5%;
   right: 5%;
   cursor: pointer;
+}
+
+.no-disp {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgb(52, 52, 52, 0.8);
+  color: #eaeaea;
 }
 </style>
