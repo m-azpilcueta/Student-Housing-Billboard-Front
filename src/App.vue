@@ -6,7 +6,7 @@
     <v-app-bar app color="primary" dark>
       <v-toolbar-title>
         <router-link to="/" v-slot="{ navigate }" custom>
-          <span @click="navigate" class="pointer">vue-example</span>
+          <span @click="navigate" class="pointer">UniPiso</span>
         </router-link>
       </v-toolbar-title>
 

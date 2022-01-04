@@ -1,19 +1,30 @@
 <template>
   <v-container>
     <v-row>
-      <v-col class="text-center"><h1 class="display-2 font-weight-bold">Welcome to the Vue Example!</h1></v-col>
-      <v-col><v-img :src="require('../assets/udc.png')" contain height="100"></v-img></v-col>
+      <v-col cols="12" sm="6" md="4" v-for="piso in pisos" :key="piso.id">
+        <PisoCard :piso="piso"></PisoCard>
+      </v-col>
     </v-row>
   </v-container>
 </template>
 
 <script>
-export default {};
+import PisoCard from "@/entities/piso/PisoCard";
+import PisoRepository from "@/repositories/PisoRepository";
+export default {
+  data() {
+    return {
+      pisos: [],
+    };
+  },
+  mounted() {
+    this.cargarPisos();
+  },
+  components: { PisoCard },
+  methods: {
+    async cargarPisos() {
+      this.pisos = await PisoRepository.findAll();
+    },
+  },
+};
 </script>
-
-<style scoped>
-h1 {
-  margin-top: 30px;
-  margin-bottom: 60px;
-}
-</style>
