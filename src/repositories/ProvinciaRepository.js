@@ -1,13 +1,10 @@
 import HTTP from "@/common/http";
 
-const resource = "pisos";
+const resource = "provincias";
 
 export default {
-  async findAll() {
+  async cargarProvincias() {
     const response = await HTTP.get(resource);
     return response.data;
-  },
-  async publicar(piso) {
-    return await HTTP.post(resource, piso);
   },
 };
