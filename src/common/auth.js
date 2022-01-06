@@ -51,6 +51,8 @@ async function _authenticate() {
   user.login = response.login;
   user.authority = response.authority;
   user.logged = true;
+  user.id = response.id;
+  user.favoritos = response.favoritos;
   return user;
 }
 

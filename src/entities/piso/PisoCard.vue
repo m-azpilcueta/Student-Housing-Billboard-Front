@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-img :src="cargarPortada(piso)"></v-img>
-    <v-icon size="25" class="favoritos" color="red darken-2" v-if="isLogged & isDisponible">mdi-heart-outline</v-icon>
+    <v-icon @click="gestionarFavs()" size="25" class="favoritos" color="red darken-2" v-if="isLogged & isDisponible">{{ favSelector }}</v-icon>
     <v-card-title>
       {{ piso.nombre }}
     </v-card-title>
@@ -31,9 +31,15 @@
 
 <script>
 import store from "@/common/store";
+import userRepository from "@/repositories/UserRepository";
 
 export default {
   name: "PisoCard",
+  data() {
+    return {
+      favoritos: store.state.user.favoritos,
+    };
+  },
   props: {
     piso: {
       type: Object,
@@ -47,6 +53,17 @@ export default {
     isDisponible() {
       return this.piso.disponible;
     },
+    isFav() {
+      let j = this.favoritos;
+      for (let x = 0; x < j.length; x++) {
+        if (j[x].idPiso === this.piso.idPiso) return true;
+      }
+      return false;
+    },
+    favSelector() {
+      if (this.isFav) return "mdi-heart";
+      else return "mdi-heart-outline";
+    },
   },
   methods: {
     cargarPortada(piso) {
@@ -57,6 +74,15 @@ export default {
         }
       }
       return require("@/assets/placeholder.png");
+    },
+    async gestionarFavs() {
+      if (!this.isFav) {
+        let u = await userRepository.hacerFavorito(store.state.user.id, { idPiso: this.piso.idPiso });
+        this.favoritos = u.favoritos;
+      } else {
+        let u = await userRepository.quitarFavorito(store.state.user.id, this.piso.idPiso);
+        this.favoritos = u.favoritos;
+      }
     },
   },
 };
