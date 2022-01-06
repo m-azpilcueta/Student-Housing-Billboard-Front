@@ -1,65 +1,94 @@
 <template>
-  <v-container class="d-flex justify-center text-center">
+  <v-container class="mt-3 mb-5">
     <v-form ref="form" @submit.prevent="save">
-      <v-card class="pa-4">
-        <v-card-title>Publicar piso</v-card-title>
-        <v-card-text>
-          <v-text-field v-model="piso.nombre" :rules="requiredField" label="Título del anuncio"></v-text-field>
-          <div class="d-flex justify-space-between flex-wrap">
-            <v-text-field v-model="piso.importe" class="mr-4" :rules="requiredField" label="Importe" prefix="€"></v-text-field>
-            <v-text-field v-model="piso.superficie" :rules="requiredField" label="Superficie"></v-text-field>
-          </div>
-          <div class="d-flex justify-space-between flex-wrap">
-            <v-select v-model="piso.habitaciones" :rules="requiredField" class="mr-4" :items="items" item-text="text" item-value="value" label="Número de habitaciones"></v-select>
-            <v-select v-model="piso.personas" :rules="requiredField" :items="items" item-text="text" item-value="value" label="Número de personas"></v-select>
-          </div>
-          <div class="d-flex align-center flex-wrap">
-            <span id="amueblado" class="mr-4">Amueblado</span>
-            <v-radio-group v-model="piso.amueblado" :rules="requiredField" row>
-              <v-radio label="Sí" value="true"></v-radio>
-              <v-radio label="No" value="false"></v-radio>
-            </v-radio-group>
-          </div>
-          <v-text-field v-model="piso.calle" :rules="requiredField" label="Calle"></v-text-field>
-          <div class="d-flex justify-space-between flex-wrap">
-            <v-text-field v-model="piso.numero" :rules="requiredField" class="mr-4" label="Portal/Puerta"></v-text-field>
-            <v-text-field v-model="piso.pisoLetra" :rules="requiredField" class="mr-4" label="Letra"></v-text-field>
-            <v-text-field v-model="piso.codigoPostal" :rules="requiredField" class="mr-4" label="Código Postal"></v-text-field>
-          </div>
-          <v-select v-model="piso.provincia" :rules="requiredField" label="Provincia" :items="provincias"></v-select>
-          <v-select v-model="piso.localidad" :rules="requiredField" label="Localidad" :items="localidades"></v-select>
-          <v-textarea v-model="piso.descripcion" :rules="requiredField" label="Descripción"></v-textarea>
-          <div class="d-flex align-center flex-wrap">
-            <span id="disponible" class="mr-4">Disponible</span>
-            <v-radio-group v-model="piso.disponible" :rules="requiredField" row>
-              <v-radio label="Sí" value="true"></v-radio>
-              <v-radio label="No" value="false"></v-radio>
-            </v-radio-group>
-          </div>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <v-btn>Cancelar</v-btn>
-          <v-btn color="primary" type="submit">Publicar</v-btn>
-        </v-card-actions>
+      <v-card>
+        <v-row>
+          <v-col :cols="dataCols">
+            <v-card-title>{{ setPageName }}</v-card-title>
+            <v-card-text>
+              <v-text-field v-model="piso.nombre" label="Título del piso" :rules="requiredField"></v-text-field>
+              <v-row>
+                <v-col cols="3">
+                  <v-text-field v-model="piso.importe" label="Importe" prefix="€" :rules="requiredField"></v-text-field>
+                </v-col>
+                <v-col cols="2">
+                  <v-text-field v-model="piso.superficie" label="Superficie" :rules="requiredField"></v-text-field>
+                </v-col>
+                <v-col cols="4">
+                  <v-select v-model="piso.habitaciones" :items="items" label="Nº habitaciones" :rules="requiredField"></v-select>
+                </v-col>
+                <v-col cols="3">
+                  <v-select v-model="piso.personas" :items="items" label="Nº personas" :rules="requiredField"></v-select>
+                </v-col>
+              </v-row>
+              <div class="d-flex align-center">
+                <span class="radio-text mr-4">Amueblado:</span>
+                <v-radio-group v-model="piso.amueblado" row mandatory>
+                  <v-radio label="Sí" :value="true"></v-radio>
+                  <v-radio label="No" :value="false"></v-radio>
+                </v-radio-group>
+              </div>
+              <v-text-field v-model="piso.calle" label="Calle" :rules="requiredField"></v-text-field>
+              <v-row>
+                <v-col cols="4">
+                  <v-text-field v-model="piso.numero" label="Número/Portal" :rules="requiredField"></v-text-field>
+                </v-col>
+                <v-col cols="4">
+                  <v-text-field v-model="piso.pisoLetra" label="Letra" :rules="requiredField"></v-text-field>
+                </v-col>
+                <v-col cols="4">
+                  <v-text-field v-model="piso.codigoPostal" label="Código postal" :rules="requiredField"></v-text-field>
+                </v-col>
+              </v-row>
+              <v-select v-model="piso.provincia" label="Provincia" :items="provincias" :rules="requiredField"></v-select>
+              <v-select v-model="piso.localidad" label="Localidad" :items="localidades" :rules="requiredField"></v-select>
+              <v-textarea v-model="piso.descripcion" label="Decripción" rows="7" :rules="requiredField"></v-textarea>
+              <div class="d-flex align-center">
+                <span class="mr-4 radio-text">Disponible:</span>
+                <v-radio-group v-model="piso.disponible" row mandatory>
+                  <v-radio label="Sí" :value="true"></v-radio>
+                  <v-radio label="No" :value="false"></v-radio>
+                </v-radio-group>
+              </div>
+            </v-card-text>
+            <div class="d-flex justify-center mb-4">
+              <v-btn class="mr-2">Cancelar</v-btn>
+              <v-btn class="ml-2" color="primary" type="submit">Publicar</v-btn>
+            </div>
+          </v-col>
+          <v-col v-if="isEdit" cols="6">
+            <v-card-title>Añadir imágenes</v-card-title>
+            <div class="ml-4 mb-4">
+              <v-img :src="portada" width="350"></v-img>
+            </div>
+            <v-row v-if="imagenes.length > 0" class="pl-4 pr-4">
+              <v-col cols="3" v-for="i in imagenes" :key="i.id">
+                <v-img class="pointer" @click="setPortada(i)" :src="fotoCargada(i)" height="75"></v-img>
+              </v-col>
+            </v-row>
+            <div class="d-flex align-center">
+              <input @change="guardarImagen()" type="file" ref="hidImagen" class="d-none" />
+              <v-btn @click="cargarImagen()" color="primary" class="ml-4 mr-4 mt-4">Adjuntar imagen</v-btn>
+            </div>
+          </v-col>
+        </v-row>
       </v-card>
     </v-form>
   </v-container>
 </template>
 
 <script>
-import provinciaRepository from "@/repositories/ProvinciaRepository";
-import localidadRepository from "@/repositories/LocalidadRepository";
 import pisoRepository from "@/repositories/PisoRepository";
+import localidadRepository from "@/repositories/LocalidadRepository";
+import provinciaRepository from "@/repositories/ProvinciaRepository";
 
 export default {
-  name: "PisoForm",
   data() {
     return {
       piso: {},
-      requiredField: [(v) => !!v || "Campo obligatorio"],
-      provincias: [],
-      localidades: [],
+      portada: require("@/assets/placeholder.png"),
+      imagenes: [],
+      requiredField: [(v) => !!v || "Este campo es obligatorio"],
       items: [
         { text: "1", value: 1 },
         { text: "2", value: 2 },
@@ -68,22 +97,66 @@ export default {
         { text: "5", value: 5 },
         { text: "6 o más", value: 6 },
       ],
+      provincias: [],
+      localidades: [],
     };
   },
-  created() {
-    this.cargarZonas();
+  name: "PisoForm",
+  computed: {
+    isEdit() {
+      return this.$route.params.id;
+    },
+    dataCols() {
+      if (!this.isEdit) return 12;
+      else return 6;
+    },
+    setPageName() {
+      if (this.isEdit) return "Editar piso";
+      else return "Publicar piso";
+    },
+  },
+  mounted() {
+    this.cargarPiso();
   },
   methods: {
-    async cargarZonas() {
-      this.provincias = await provinciaRepository.cargarProvincias();
+    cargarImagen() {
+      this.$refs.hidImagen.click();
+    },
+    async guardarImagen() {
+      await pisoRepository
+        .subirImagen(this.$route.params.id, this.$refs.hidImagen.files[0])
+        .then(async () => (this.imagenes = await pisoRepository.cargarImagenes(this.$route.params.id)));
+    },
+    fotoCargada(i) {
+      return `http://localhost:8080/api/pisos/${this.piso.idPiso}/imagenes/${i.idImagen}`;
+    },
+    async cargarPiso() {
       this.localidades = await localidadRepository.cargarLocalidades();
+      this.provincias = await provinciaRepository.cargarProvincias();
+      if (this.isEdit) {
+        this.piso = await pisoRepository.findById(this.$route.params.id);
+        this.imagenes = this.piso.imagenes;
+        this.imagenes.forEach((i) => {
+          if (i.portada === true) this.portada = `http://localhost:8080/api/pisos/${this.piso.idPiso}/imagenes/${i.idImagen}`;
+        });
+      }
+    },
+    async setPortada(i) {
+      await pisoRepository.ponerPortada(this.piso.idPiso, i.idImagen, {
+        idPiso: this.piso.idPiso,
+        idImagen: i.idImagen,
+        portada: true,
+      });
+      this.portada = `http://localhost:8080/api/pisos/${this.piso.idPiso}/imagenes/${i.idImagen}`;
     },
     async save() {
       if (!this.$refs.form.validate()) {
         return;
       }
       try {
-        await pisoRepository.publicar(this.piso);
+        let pisocopia = JSON.parse(JSON.stringify(this.piso));
+        pisocopia.imagenes = [];
+        await pisoRepository.publicar(pisocopia);
       } catch (err) {
         this.$notify({
           text: err.response.data.message,
@@ -96,12 +169,7 @@ export default {
 </script>
 
 <style scoped>
-.v-form {
-  width: 100%;
-  max-width: 650px;
-}
-#amueblado,
-#disponible {
+.radio-text {
   font-size: 16px;
 }
 </style>

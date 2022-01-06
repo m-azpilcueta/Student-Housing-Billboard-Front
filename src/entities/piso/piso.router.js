@@ -13,6 +13,11 @@ const routes = [
     component: PisoDetail,
     meta: { public: true },
   },
+  {
+    name: "PisoUpdate",
+    path: "/pisos/:id/edit",
+    component: PisoForm,
+  },
 ];
 
 export default routes;
