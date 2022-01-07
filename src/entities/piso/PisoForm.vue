@@ -62,8 +62,9 @@
               <v-img :src="portada" width="350"></v-img>
             </div>
             <v-row v-if="imagenes.length > 0" class="pl-4 pr-4">
-              <v-col cols="3" v-for="i in imagenes" :key="i.id">
+              <v-col cols="3" v-for="i in imagenes" :key="i.id" class="d-flex flex-column justify-center">
                 <v-img class="pointer" @click="setPortada(i)" :src="fotoCargada(i)" height="75"></v-img>
+                <v-icon @click="borrarImagen(i)" color="red darken-2" class="mt-1 pointer">mdi-delete</v-icon>
               </v-col>
             </v-row>
             <div class="d-flex align-center">
@@ -142,12 +143,20 @@ export default {
       }
     },
     async setPortada(i) {
-      await pisoRepository.ponerPortada(this.piso.idPiso, i.idImagen, {
-        idPiso: this.piso.idPiso,
-        idImagen: i.idImagen,
-        portada: true,
-      });
+      await pisoRepository
+        .ponerPortada(this.piso.idPiso, i.idImagen, {
+          idPiso: this.piso.idPiso,
+          idImagen: i.idImagen,
+          portada: true,
+        })
+        .then(async () => (this.imagenes = await pisoRepository.cargarImagenes(this.$route.params.id)));
       this.portada = `http://localhost:8080/api/pisos/${this.piso.idPiso}/imagenes/${i.idImagen}`;
+    },
+    async borrarImagen(i) {
+      await pisoRepository.borrarImagen(this.piso.idPiso, i.idImagen).then(async () => {
+        if (i.portada) this.portada = require("@/assets/placeholder.png");
+        this.imagenes = await pisoRepository.cargarImagenes(this.$route.params.id);
+      });
     },
     async save() {
       if (!this.$refs.form.validate()) {

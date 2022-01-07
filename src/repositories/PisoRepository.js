@@ -28,6 +28,9 @@ export default {
       })
     ).data;
   },
+  async borrarImagen(idPiso, idImagen) {
+    await HTTP.delete(`${resource}/${idPiso}/imagenes/${idImagen}`);
+  },
   async cargarImagenes(id) {
     const response = await HTTP.get(`${resource}/${id}/imagenes`);
     return response.data;
