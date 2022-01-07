@@ -3,7 +3,8 @@
     <v-card class="mt-3 mb-5 pl-5 pr-5 pb-5">
       <v-row class="pt-5 pb-5">
         <v-col cols="6">
-          <v-carousel height="350">
+          <v-img v-if="imagenes.length === 0" :src="portada" height="350"></v-img>
+          <v-carousel v-if="imagenes.length > 0" height="350">
             <v-carousel-item v-for="i in imagenes" :key="i.idImagen" :src="srcConstructor(i)"></v-carousel-item>
           </v-carousel>
           <div class="d-flex flex-column mt-5 borde">
@@ -54,6 +55,33 @@
           </div>
         </v-col>
       </v-row>
+      <div class="borde">
+        <span><b>Preguntas y respuestas</b></span>
+        <div v-if="mensajes.length == 0" class="d-flex justify-center align-center mt-2 mb-4">
+          <span>Nadie ha realizado preguntas todavía.</span>
+          <span v-if="!isLogged" class="ml-1">Debes iniciar sesión para realizar preguntas.</span>
+        </div>
+        <div v-for="m in mensajes" :key="m.id" class="d-flex flex-column">
+          <div class="d-flex align-start">
+            <v-icon size="40" class="mr-1">mdi-account-circle</v-icon>
+            <div class="d-flex flex-column">
+              <span
+                ><b>{{ m.usuario.nombre }}</b> pregunta:</span
+              >
+              <span>{{ m.texto }}</span>
+            </div>
+          </div>
+          <span v-if="m.respuesta"><b>Respuesta del anunciante: </b>{{ m.respuesta.texto }}</span>
+          <div v-if="isLogged & isMismoUsuario & !m.respuesta" class="d-flex align-center mt-2 mb-4">
+            <input v-model="nuevaRespuesta" class="texto-pregunta" placeholder="Escribe una respuesta" />
+            <v-btn @click="responder(m.id)" class="ml-2" :disabled="nuevaRespuesta.length === 0">Publicar respuesta</v-btn>
+          </div>
+        </div>
+        <div v-if="isLogged & !isMismoUsuario" class="d-flex align-center mt-2 mb-4">
+          <input v-model="nuevaPregunta" class="texto-pregunta" placeholder="Escribe una pregunta" />
+          <v-btn @click="preguntar()" class="ml-2" :disabled="nuevaPregunta.length === 0">Publicar pregunta</v-btn>
+        </div>
+      </div>
     </v-card>
   </v-container>
 </template>
@@ -71,6 +99,9 @@ export default {
       imagenes: [],
       portada: require("@/assets/placeholder.png"),
       user: store.state.user,
+      mensajes: [],
+      nuevaPregunta: "",
+      nuevaRespuesta: "",
     };
   },
   name: "PisoDetail",
@@ -78,6 +109,10 @@ export default {
     this.cargarPiso().then(() => {
       if (this.piso.imagenes.length > 0) {
         this.imagenes = this.piso.imagenes;
+      }
+      if (this.piso.mensajes.length > 0) {
+        this.mensajes = this.piso.mensajes;
+        this.mensajes.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
       }
     });
   },
@@ -88,6 +123,9 @@ export default {
     },
     isLogged() {
       return store.state.user.logged;
+    },
+    isAdmin() {
+      return this.user.authority === "ADMIN";
     },
     isDisponible() {
       return this.piso.disponible;
@@ -130,6 +168,16 @@ export default {
         this.user.favoritos = u.favoritos;
       }
     },
+    async preguntar() {
+      let m = await pisoRepository.hacerPregunta(this.piso.idPiso, { texto: this.nuevaPregunta });
+      this.mensajes = m.mensajes;
+      this.nuevaPregunta = "";
+    },
+    async responder(idPregunta) {
+      let m = await pisoRepository.responder(this.piso.idPiso, idPregunta, { texto: this.nuevaRespuesta });
+      this.mensajes = m.mensajes;
+      this.nuevaRespuesta = "";
+    },
   },
 };
 </script>
@@ -147,5 +195,11 @@ export default {
   border: 1px solid lightgray;
   border-radius: 5px;
   padding: 0.5em 1em;
+}
+.texto-pregunta {
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  padding: 0.2em 0.5em;
+  flex-grow: 1;
 }
 </style>

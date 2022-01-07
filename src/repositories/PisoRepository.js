@@ -36,4 +36,12 @@ export default {
     const response = await HTTP.put(`${resource}/${idPiso}/imagenes/${idImagen}`, body);
     return response.data;
   },
+  async hacerPregunta(idPiso, pregunta) {
+    const response = await HTTP.post(`${resource}/${idPiso}/preguntas`, pregunta);
+    return response.data;
+  },
+  async responder(idPiso, idPregunta, respuesta) {
+    const response = await HTTP.post(`${resource}/${idPiso}/preguntas/${idPregunta}`, respuesta);
+    return response.data;
+  },
 };
