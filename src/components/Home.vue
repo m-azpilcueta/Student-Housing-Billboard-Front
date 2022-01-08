@@ -4,7 +4,7 @@
       <v-col cols="12">
         <v-card class="d-flex align-start">
           <v-card-title class="mr-2">Ordenar por:</v-card-title>
-          <v-select :items="ordenacion" class="mr-5" placeholder="Seleccionar ordenación"></v-select>
+          <v-select :items="ordenacion" @input="cargarPisosFiltrados()" v-model="sort" item-value="value" class="mr-5" placeholder="Seleccionar ordenación"></v-select>
         </v-card>
       </v-col>
       <v-col cols="12" sm="6" md="4">
@@ -30,25 +30,27 @@
 <script>
 import PisoCard from "@/entities/piso/PisoCard";
 import PisoRepository from "@/repositories/PisoRepository";
+const ordenacion = [
+  { text: "Fecha de publicación (descendente)", value: "MAS_RECIENTE" },
+  { text: "Fecha de publicación (ascendente)", value: "MENOS_RECIENTE" },
+  { text: "Importe mensual (mayor a menor)", value: "IMPORTE_DESCENDENTE" },
+  { text: "Importe mensual (menor a mayor)", value: "IMPORTE_ASCENDENTE" },
+];
 export default {
   data() {
     return {
       pisos: [],
-      ordenacion: [
-        { text: "Importe mensual (menor a mayor)" },
-        { text: "Importe mensual (mayor a menor)" },
-        { text: "Fecha de publicación (descendente)" },
-        { text: "Fecha de publicación (ascendente)" },
-      ],
+      ordenacion,
+      sort: ordenacion[0].value,
     };
   },
   mounted() {
-    this.cargarPisos();
+    this.cargarPisosFiltrados();
   },
   components: { PisoCard },
   methods: {
-    async cargarPisos() {
-      this.pisos = await PisoRepository.findAll();
+    async cargarPisosFiltrados() {
+      this.pisos = await PisoRepository.findAll(this.sort);
     },
   },
 };

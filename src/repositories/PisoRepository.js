@@ -1,10 +1,16 @@
 import HTTP from "@/common/http";
+import { URLSearchParams } from "core-js/modules/web.url-search-params";
 
 const resource = "pisos";
 
 export default {
-  async findAll() {
-    const response = await HTTP.get(resource);
+  async findAll(sort) {
+    const params = new URLSearchParams();
+    if (sort) params.append("sort", sort);
+    const paramsStr = params.toString();
+    let url = resource;
+    if (paramsStr) url += "?" + paramsStr;
+    const response = await HTTP.get(url);
     return response.data;
   },
   async publicar(piso) {
