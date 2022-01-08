@@ -19,11 +19,13 @@
           <v-icon left>mdi-heart</v-icon>
           Favoritos
         </v-btn>
-        <v-btn active-class="hide-active" icon to="/register" v-if="!isLogged">
-          <v-icon>mdi-account-plus</v-icon>
+        <v-btn active-class="hide-active" text to="/register" v-if="!isLogged">
+          <v-icon left>mdi-account-plus</v-icon>
+          Registrarse
         </v-btn>
-        <v-btn active-class="hide-active" icon to="/login" v-if="!isLogged">
-          <v-icon>mdi-login</v-icon>
+        <v-btn active-class="hide-active" text to="/login" v-if="!isLogged">
+          <v-icon left>mdi-login</v-icon>
+          Iniciar sesión
         </v-btn>
         <v-btn icon @click="logout()" v-if="isLogged">
           <v-icon>mdi-logout</v-icon>
