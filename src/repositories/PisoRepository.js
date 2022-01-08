@@ -4,10 +4,11 @@ import { URLSearchParams } from "core-js/modules/web.url-search-params";
 const resource = "pisos";
 
 export default {
-  async findAll(sort) {
+  async findAll(query, sort) {
     const params = new URLSearchParams();
     if (sort) params.append("sort", sort);
-    const paramsStr = params.toString();
+    let paramsStr = params.toString();
+    if (query) paramsStr = 'filter="' + query + '"&' + paramsStr;
     let url = resource;
     if (paramsStr) url += "?" + paramsStr;
     const response = await HTTP.get(url);
