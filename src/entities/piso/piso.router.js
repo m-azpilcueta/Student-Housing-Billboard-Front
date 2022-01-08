@@ -1,5 +1,6 @@
 import PisoDetail from "@/entities/piso/PisoDetail";
 import PisoForm from "@/entities/piso/PisoForm";
+import PisoList from "@/entities/piso/PisoList";
 
 const routes = [
   {
@@ -17,6 +18,12 @@ const routes = [
     name: "PisoUpdate",
     path: "/pisos/:id/edit",
     component: PisoForm,
+  },
+  {
+    name: "PisoList",
+    path: "/pisos",
+    component: PisoList,
+    meta: { public: true },
   },
 ];
 

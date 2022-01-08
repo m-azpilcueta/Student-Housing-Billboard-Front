@@ -1,8 +1,9 @@
 <template>
-  <v-layout align-center justify-center>
+  <v-layout align-center justify-center class="mb-5 mt-5">
     <v-flex xs12 sm8 md4>
       <v-form @submit.prevent="userLogin">
-        <v-card>
+        <v-card class="pa-4">
+          <v-card-title>Iniciar sesión</v-card-title>
           <v-card-text>
             <v-text-field label="Login" name="login" prepend-icon="person" type="text" v-model="username"></v-text-field>
 

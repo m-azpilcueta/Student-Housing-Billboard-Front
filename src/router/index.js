@@ -3,7 +3,7 @@ import VueRouter from "vue-router";
 import auth from "@/common/auth";
 import store from "@/common/store";
 import pisoRouter from "@/entities/piso/piso.router";
-import { NotFound, Login, Home, Register } from "@/components";
+import { NotFound, Login, Register } from "@/components";
 
 const user = store.state.user;
 
@@ -17,16 +17,14 @@ const routes = [
     meta: { public: true, isLoginPage: true },
   },
   {
-    path: "/",
-    name: "Home",
-    component: Home,
-    meta: { public: true },
-  },
-  {
     path: "/register",
     name: "Register",
     component: Register,
     meta: { public: true },
+  },
+  {
+    path: "/",
+    redirect: "/pisos",
   },
   { path: "*", component: NotFound, meta: { public: true } },
 ];

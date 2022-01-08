@@ -13,8 +13,12 @@
       <v-spacer></v-spacer>
 
       <v-toolbar-items>
-        <v-btn to="/posts" exact text>posts</v-btn>
+        <v-btn to="/pisos" exact text>pisos</v-btn>
 
+        <v-btn active-class="hide-active" text to="/" v-if="isLogged">
+          <v-icon left>mdi-heart</v-icon>
+          Favoritos
+        </v-btn>
         <v-btn active-class="hide-active" icon to="/register" v-if="!isLogged">
           <v-icon>mdi-account-plus</v-icon>
         </v-btn>
