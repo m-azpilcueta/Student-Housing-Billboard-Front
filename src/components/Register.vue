@@ -1,8 +1,9 @@
 <template>
-  <v-layout align-center justify-center>
+  <v-layout align-center justify-center class="mb-5 mt-5">
     <v-flex xs12 sm8 md6>
       <v-form ref="form" @submit.prevent="userRegister">
-        <v-card class="mx-auto my-10">
+        <v-card class="pa-4">
+          <v-card-title>Registrar usuario</v-card-title>
           <v-card-text>
             <v-text-field v-model="user.nombre" label="Nombre" name="nombre" prepend-icon="mdi-account" type="text" :rules="requiredField"></v-text-field>
             <v-text-field v-model="user.login" label="Login" name="login" prepend-icon="mdi-account-circle" type="text" :rules="requiredField"></v-text-field>
@@ -10,14 +11,15 @@
             <v-text-field v-model="user.email" label="Email" name="email" prepend-icon="mdi-email " type="text" :rules="requiredField"></v-text-field>
             <v-text-field
               v-model="user.telefonoContacto"
-              label="Telefono de Contacto"
+              label="Telefono de contacto"
               name="telefono"
               prepend-icon="mdi-cellphone"
               type="text"
               :rules="requiredField"
             ></v-text-field>
             <v-select
-              v-model="universidad"
+              @change="cargarEstudiosByUniversidad()"
+              v-model="user.universidad"
               :items="universidades"
               item-text="nombreUniversidad"
               prepend-icon="mdi-home-modern"
@@ -31,24 +33,23 @@
             -->
             <v-combobox
               v-model="user.estudio"
-              clearable
-              @click="cargarEstudiosByUniversidad"
-              :disabled="comprobarUniversidad"
               :items="filtrados"
-              item-text="nombreEstudio"
               prepend-icon="mdi-book"
+              label="Estudio"
               return-object
-              label="Estudio escrito"
-              placeholder="Empieza a escribir para buscar"
-              type="text"
-              :rules="requiredField"
+              item-text="nombreEstudio"
+              item-value="nombreEstudio"
+              :disabled="estudioDisabled"
+              clearable
+              persistent-hint
+              hint="Si tu estudio no se encuentra en la lista, escríbelo y pulsa 'Enter' en el teclado."
+              @keyup.enter="crearEstudio()"
             >
             </v-combobox>
           </v-card-text>
 
-          <v-card-actions>
+          <v-card-actions class="d-flex justify-space-around">
             <v-btn color="error" @click="back()"> Cancelar <v-icon right dark> mdi-close-circle-outline </v-icon></v-btn>
-            <v-spacer />
             <v-btn type="submit" color="primary"> Registrar <v-icon right dark> mdi-check-circle-outline </v-icon></v-btn>
           </v-card-actions>
         </v-card>
@@ -65,41 +66,32 @@ import EstudioRepository from "@/repositories/EstudioRepository";
 export default {
   data() {
     return {
-      user: {
-        estudio: {},
-      },
-      universidad: null,
+      estudioDisabled: true,
+      user: {},
       universidades: [],
-      estudioPrueba: {
-        nombreEstudio: null,
-        universidad: {
-          idUniversidad: null,
-        },
-      },
       filtrados: [],
-      requiredField: [(v) => !!v || "Field is required"],
+      requiredField: [(v) => !!v || "Este campo es obligatorio"],
     };
-  },
-  computed: {
-    comprobarUniversidad() {
-      return this.universidad === null;
-    },
   },
   async created() {
     this.universidades = await UniversidadRepository.findAllUniversidades();
   },
   methods: {
     async cargarEstudiosByUniversidad() {
-      this.filtrados = await UniversidadRepository.findAllEstudiosByUniversidad(this.universidad.idUniversidad);
+      this.filtrados = await UniversidadRepository.findAllEstudiosByUniversidad(this.user.universidad.idUniversidad);
+      this.estudioDisabled = false;
+    },
+    async crearEstudio() {
+      this.filtrados.push(
+        await EstudioRepository.crearEstudio({
+          nombreEstudio: this.user.estudio,
+          universidad: this.user.universidad,
+        })
+      );
     },
     async userRegister() {
       if (!this.$refs.form.validate()) {
         return;
-      }
-      if (!this.filtrados.includes(this.user.estudio)) {
-        this.estudioPrueba.nombreEstudio = this.user.estudio;
-        this.estudioPrueba.universidad.idUniversidad = this.universidad.idUniversidad;
-        await EstudioRepository.crearEstudio(this.estudioPrueba).then(async () => this.cargarEstudiosByUniversidad());
       }
       try {
         await AccountRepository.registerAccount(this.user);
