@@ -11,7 +11,7 @@
             <v-text-field v-model="user.email" label="Email" name="email" prepend-icon="mdi-email " type="text" :rules="requiredField"></v-text-field>
             <v-text-field
               v-model="user.telefonoContacto"
-              label="Telefono de contacto"
+              label="Teléfono de contacto"
               name="telefono"
               prepend-icon="mdi-cellphone"
               type="text"
