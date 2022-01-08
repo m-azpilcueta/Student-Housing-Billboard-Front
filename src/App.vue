@@ -14,7 +14,7 @@
 
       <v-toolbar-items>
         <v-btn to="/pisos" exact text>
-          <v-icon left>mdi-home</v-icon>
+          <v-icon left>mdi-domain</v-icon>
           pisos
         </v-btn>
         <v-btn active-class="hide-active" text to="/" v-if="isLogged">
