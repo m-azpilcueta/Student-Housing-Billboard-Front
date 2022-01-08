@@ -14,8 +14,10 @@
 
       <v-toolbar-items>
         <v-btn to="/posts" exact text>posts</v-btn>
-        <v-btn to="/posts_preloading" exact text>posts preloading</v-btn>
-        <v-btn to="/posts_sin_vuetify" exact text>posts sin vuetify</v-btn>
+
+        <v-btn active-class="hide-active" icon to="/register" v-if="!isLogged">
+          <v-icon>mdi-account-plus</v-icon>
+        </v-btn>
         <v-btn active-class="hide-active" icon to="/login" v-if="!isLogged">
           <v-icon>mdi-login</v-icon>
         </v-btn>
@@ -45,6 +47,9 @@ export default {
   computed: {
     isLogged() {
       return this.user.logged;
+    },
+    isAdmin() {
+      return this.user.authority == "ADMIN";
     },
   },
   methods: {
