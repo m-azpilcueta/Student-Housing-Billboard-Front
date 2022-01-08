@@ -7,4 +7,9 @@ export default {
     const response = await HTTP.get(resource);
     return response.data;
   },
+
+  async crearEstudio(estudio) {
+    const response = await HTTP.post(`${resource}`, estudio);
+    return response.data;
+  },
 };

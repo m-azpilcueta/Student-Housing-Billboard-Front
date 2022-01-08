@@ -1,6 +1,6 @@
 <template>
   <v-layout align-center justify-center>
-    <v-flex xs12 sm8 md4>
+    <v-flex xs12 sm8 md6>
       <v-form ref="form" @submit.prevent="userRegister">
         <v-card class="mx-auto my-10">
           <v-card-text>
@@ -16,10 +16,34 @@
               type="text"
               :rules="requiredField"
             ></v-text-field>
-            <v-select v-model="universidad" :items="universidades" item-text="nombreUniversidad" return-object label="Universidad" type="text" :rules="requiredField"></v-select>
-            <v-select v-model="user.estudio" :items="estudios" item-text="nombreEstudio" return-object label="Estudio" type="text" :rules="requiredField"></v-select>
-            <span> {{ universidad }} </span>
-            <v-select :items="filtrados" item-text="nombreEstudio" return-object label="Estudio" type="text" :rules="requiredField"></v-select>
+            <v-select
+              v-model="universidad"
+              :items="universidades"
+              item-text="nombreUniversidad"
+              prepend-icon="mdi-home-modern"
+              return-object
+              label="Universidad"
+              type="text"
+              :rules="requiredField"
+            ></v-select>
+            <!--
+            <v-autocomplete clearable @click="cargarEstudiosByUniversidad" :disabled="comprobarUniversidad" v-model="estudioPrueba" :items="filtrados" item-text="nombreEstudio" prepend-icon="mdi-book" return-object label="Estudio escrito" placeholder="Empieza a escribir para buscar" type="text" :rules="requiredField"> </v-autocomplete>
+            -->
+            <v-combobox
+              v-model="user.estudio"
+              clearable
+              @click="cargarEstudiosByUniversidad"
+              :disabled="comprobarUniversidad"
+              :items="filtrados"
+              item-text="nombreEstudio"
+              prepend-icon="mdi-book"
+              return-object
+              label="Estudio escrito"
+              placeholder="Empieza a escribir para buscar"
+              type="text"
+              :rules="requiredField"
+            >
+            </v-combobox>
           </v-card-text>
 
           <v-card-actions>
@@ -41,25 +65,41 @@ import EstudioRepository from "@/repositories/EstudioRepository";
 export default {
   data() {
     return {
-      user: {},
-      universidad: {
-        idUniversidad: 1,
+      user: {
+        estudio: {},
       },
+      universidad: null,
       universidades: [],
-      estudios: [],
+      estudioPrueba: {
+        nombreEstudio: null,
+        universidad: {
+          idUniversidad: null,
+        },
+      },
       filtrados: [],
       requiredField: [(v) => !!v || "Field is required"],
     };
   },
+  computed: {
+    comprobarUniversidad() {
+      return this.universidad === null;
+    },
+  },
   async created() {
     this.universidades = await UniversidadRepository.findAllUniversidades();
-    this.estudios = await EstudioRepository.findAll();
-    this.filtrados = await EstudioRepository.findAllEstudiosByUniversidad(this.universidad.idUniversidad);
   },
   methods: {
+    async cargarEstudiosByUniversidad() {
+      this.filtrados = await UniversidadRepository.findAllEstudiosByUniversidad(this.universidad.idUniversidad);
+    },
     async userRegister() {
       if (!this.$refs.form.validate()) {
         return;
+      }
+      if (!this.filtrados.includes(this.user.estudio)) {
+        this.estudioPrueba.nombreEstudio = this.user.estudio;
+        this.estudioPrueba.universidad.idUniversidad = this.universidad.idUniversidad;
+        await EstudioRepository.crearEstudio(this.estudioPrueba).then(async () => this.cargarEstudiosByUniversidad());
       }
       try {
         await AccountRepository.registerAccount(this.user);
