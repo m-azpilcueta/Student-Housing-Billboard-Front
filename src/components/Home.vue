@@ -44,8 +44,9 @@
           <v-card-subtitle class="radio-text pb-0">Disponibilidad:</v-card-subtitle>
           <v-checkbox class="pr-4 pl-4" v-model="filtros.disp" label="Disponible"></v-checkbox>
           <v-checkbox class="pr-4 pl-4 mt-0" v-model="filtros.nodisp" label="No disponible"></v-checkbox>
-          <div class="d-flex justify-center">
-            <v-btn color="primary" @click="aplicarFiltros()">Aplicar filtros</v-btn>
+          <div class="d-flex justify-center align-center flex-nowrap">
+            <v-btn color="primary" class="mr-1" @click="aplicarFiltros()">Aplicar filtros</v-btn>
+            <v-btn @click="resetFiltros()" class="ml-1">Resetear filtros</v-btn>
           </div>
         </v-card>
       </v-col>
@@ -143,6 +144,11 @@ export default {
     },
     async estudioItems() {
       this.estudios = await universidadRepository.findAllEstudiosByUniversidad(this.filtros.universidad);
+    },
+    async resetFiltros() {
+      Object.keys(this.filtros).forEach((key) => {
+        this.filtros[key] = null;
+      });
     },
   },
 };
