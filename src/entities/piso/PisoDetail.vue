@@ -15,7 +15,9 @@
         <v-col cols="6">
           <div class="d-flex">
             <span id="disponible" class="primary flex-grow-1">{{ setDisponible }}</span>
-            <v-icon @click="gestionarFavs()" size="35" class="pointer ml-2" v-if="isLogged & isDisponible & !isMismoUsuario" color="red darken-2">{{ favSelector }}</v-icon>
+            <v-icon @click="gestionarFavs()" size="35" class="pointer ml-2" v-if="isLogged & isDisponible & !isMismoUsuario & !isAdmin" color="red darken-2">{{
+              favSelector
+            }}</v-icon>
           </div>
           <div class="d-flex align-center mb-4 mt-4 borde">
             <div class="d-flex flex-column mr-5">
@@ -25,10 +27,22 @@
               >
             </div>
             <div class="d-flex flex-column">
-              <span>{{ piso.anunciante.email }}</span>
-              <span>{{ piso.anunciante.telefonoContacto }}</span>
-              <span>{{ piso.anunciante.estudio.nombreEstudio }}</span>
-              <span>{{ piso.anunciante.estudio.universidad.nombreUniversidad }}</span>
+              <div class="d-flex">
+                <v-icon size="20" class="mr-1">mdi-email</v-icon>
+                <span>{{ piso.anunciante.email }}</span>
+              </div>
+              <div class="d-flex">
+                <v-icon size="20" class="mr-1">mdi-phone</v-icon>
+                <span>{{ piso.anunciante.telefonoContacto }}</span>
+              </div>
+              <div class="d-flex">
+                <v-icon size="20" class="mr-1">mdi-book</v-icon>
+                <span>{{ piso.anunciante.estudio.nombreEstudio }}</span>
+              </div>
+              <div class="d-flex">
+                <v-icon size="20" class="mr-1">mdi-home-modern</v-icon>
+                <span>{{ piso.anunciante.estudio.universidad.nombreUniversidad }}</span>
+              </div>
             </div>
           </div>
           <span
@@ -77,10 +91,13 @@
             <v-btn @click="responder(m.id)" class="ml-2" :disabled="nuevaRespuesta.length === 0">Publicar respuesta</v-btn>
           </div>
         </div>
-        <div v-if="isLogged & !isMismoUsuario" class="d-flex align-center mt-2 mb-4">
+        <div v-if="isLogged & !isMismoUsuario & !isAdmin" class="d-flex align-center mt-2 mb-4">
           <input v-model="nuevaPregunta" class="texto-pregunta" placeholder="Escribe una pregunta" />
           <v-btn @click="preguntar()" class="ml-2" :disabled="nuevaPregunta.length === 0">Publicar pregunta</v-btn>
         </div>
+      </div>
+      <div v-if="isAdmin" class="d-flex mt-1">
+        <v-btn color="error" class="mt-2 flex-grow-1" @click="borrarPiso()">Eliminar piso</v-btn>
       </div>
     </v-card>
   </v-container>
@@ -177,6 +194,19 @@ export default {
       let m = await pisoRepository.responder(this.piso.idPiso, idPregunta, { texto: this.nuevaRespuesta });
       this.mensajes = m.mensajes;
       this.nuevaRespuesta = "";
+    },
+    async borrarPiso() {
+      try {
+        await pisoRepository.borrarPiso(this.piso.idPiso);
+        this.$router.replace({
+          name: "PisoList",
+        });
+      } catch (e) {
+        this.$notify({
+          text: e.response.data.message,
+          type: "error",
+        });
+      }
     },
   },
 };
