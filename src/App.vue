@@ -13,11 +13,17 @@
       <v-spacer></v-spacer>
 
       <v-toolbar-items>
-        <v-btn to="/pisos" exact text>pisos</v-btn>
-
+        <v-btn to="/pisos" exact text>
+          <v-icon left>mdi-home</v-icon>
+          pisos
+        </v-btn>
         <v-btn active-class="hide-active" text to="/" v-if="isLogged">
           <v-icon left>mdi-heart</v-icon>
           Favoritos
+        </v-btn>
+        <v-btn active-class="hide-active" text to="/login" v-if="isLogged & isAdmin">
+          <v-icon left>mdi-account</v-icon>
+          Usuarios
         </v-btn>
         <v-btn active-class="hide-active" text to="/register" v-if="!isLogged">
           <v-icon left>mdi-account-plus</v-icon>
@@ -27,8 +33,9 @@
           <v-icon left>mdi-login</v-icon>
           Iniciar sesión
         </v-btn>
-        <v-btn icon @click="logout()" v-if="isLogged">
-          <v-icon>mdi-logout</v-icon>
+        <v-btn text @click="logout()" v-if="isLogged">
+          <v-icon left>mdi-logout</v-icon>
+          Cerrar sesión
         </v-btn>
       </v-toolbar-items>
     </v-app-bar>
@@ -62,8 +69,8 @@ export default {
     logout() {
       auth.logout();
       // Después de hacer logout nos vamos a home
-      if (this.$router.currentRoute.name != "Home") {
-        this.$router.push({ name: "Home" });
+      if (this.$router.currentRoute.name != "PisoList") {
+        this.$router.push({ name: "PisoList" });
       }
     },
   },
