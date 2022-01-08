@@ -14,8 +14,24 @@
             <v-icon>mdi-filter</v-icon>
             <v-card-title>Filtrar por:</v-card-title>
           </div>
-          <v-select v-model="filtros.universidad" class="pr-4 pl-4" label="Universidad"></v-select>
-          <v-select v-model="filtros.estudio" class="pr-4 pl-4" label="Estudios"></v-select>
+          <v-select
+            @change="estudioItems()"
+            v-model="filtros.universidad"
+            :items="universidades"
+            item-text="nombreUniversidad"
+            item-value="idUniversidad"
+            class="pr-4 pl-4"
+            label="Universidad"
+          ></v-select>
+          <v-select
+            v-model="filtros.estudio"
+            :items="estudios"
+            item-text="nombreEstudio"
+            item-value="idEstudio"
+            :disabled="habilitarEstudios"
+            class="pr-4 pl-4"
+            label="Estudios"
+          ></v-select>
           <v-select v-model="filtros.provincia" :items="provincias" class="pr-4 pl-4" label="Provincia"></v-select>
           <v-select v-model="filtros.localidad" :items="localidades" class="pr-4 pl-4" label="Localidad"></v-select>
           <v-select v-model="filtros.habitaciones" class="pr-4 pl-4" label="Nº de habitaciones" :items="items"></v-select>
@@ -48,6 +64,8 @@ import PisoCard from "@/entities/piso/PisoCard";
 import PisoRepository from "@/repositories/PisoRepository";
 import localidadRepository from "@/repositories/LocalidadRepository";
 import provinciaRepository from "@/repositories/ProvinciaRepository";
+import universidadRepository from "@/repositories/UniversidadRepository";
+
 const ordenacion = [
   { text: "Fecha de publicación (descendente)", value: "MAS_RECIENTE" },
   { text: "Fecha de publicación (ascendente)", value: "MENOS_RECIENTE" },
@@ -69,6 +87,8 @@ export default {
       pisos: [],
       localidades: [],
       provincias: [],
+      universidades: [],
+      estudios: [],
       ordenacion,
       sort: ordenacion[0].value,
       query: "",
@@ -87,8 +107,13 @@ export default {
       },
     };
   },
+  computed: {
+    habilitarEstudios() {
+      return this.filtros.universidad == null;
+    },
+  },
   mounted() {
-    this.cargarZonas();
+    this.cargarDatos();
     this.cargarPisosFiltrados();
   },
   components: { PisoCard },
@@ -98,8 +123,8 @@ export default {
     },
     async aplicarFiltros() {
       this.query = "";
-      if (this.filtros.universidad) this.query += `anunciante.estudio.universidad.nombre = '${this.filtros.universidad}' and `;
-      if (this.filtros.estudio) this.query += `anunciante.estudio.nombre = '${this.filtros.estudio}' and `;
+      if (this.filtros.universidad) this.query += `anunciante.estudio.universidad.idUniversidad = ${this.filtros.universidad} and `;
+      if (this.filtros.estudio) this.query += `anunciante.estudio.idEstudio = ${this.filtros.estudio} and `;
       if (this.filtros.provincia) this.query += `provincia = '${this.filtros.provincia}' and `;
       if (this.filtros.localidad) this.query += `localidad = '${this.filtros.localidad}' and `;
       if (this.filtros.habitaciones) this.query += `habitaciones = ${this.filtros.habitaciones} and `;
@@ -111,9 +136,13 @@ export default {
       if (this.query.slice(-4) === "and ") this.query = this.query.substr(0, this.query.length - 5);
       await this.cargarPisosFiltrados();
     },
-    async cargarZonas() {
+    async cargarDatos() {
       this.localidades = await localidadRepository.cargarLocalidades();
       this.provincias = await provinciaRepository.cargarProvincias();
+      this.universidades = await universidadRepository.findAllUniversidades();
+    },
+    async estudioItems() {
+      this.estudios = await universidadRepository.findAllEstudiosByUniversidad(this.filtros.universidad);
     },
   },
 };
