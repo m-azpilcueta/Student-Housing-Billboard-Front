@@ -104,9 +104,13 @@ export default {
       }
       try {
         await AccountRepository.registerAccount(this.user);
-        await this.$router.replace({
-          name: "Login",
-        });
+        if (this.$route.params.id) {
+          this.back();
+        } else {
+          await this.$router.replace({
+            name: "Login",
+          });
+        }
       } catch (err) {
         this.$notify({
           text: err.response.data.message,
