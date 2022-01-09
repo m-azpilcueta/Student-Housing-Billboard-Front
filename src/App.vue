@@ -15,6 +15,8 @@
       <v-toolbar-items>
         <v-btn to="/posts" exact text>posts</v-btn>
 
+        <v-btn active-class="hide-active" :to="{ name: 'UsersProfile', params: { id: user.id } }" color="primary" v-if="isLogged"> <v-icon>mdi-account</v-icon> Mi perfil </v-btn>
+
         <v-btn active-class="hide-active" icon to="/register" v-if="!isLogged">
           <v-icon>mdi-account-plus</v-icon>
         </v-btn>
