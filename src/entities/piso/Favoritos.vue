@@ -3,10 +3,10 @@
     <v-card class="pr-5 pl-5 pb-5">
       <v-card-title class="pl-0">Mis favoritos</v-card-title>
       <div v-if="favoritos.length === 0" class="d-flex justify-center align-center mb-2">
-        <span>No has seleccionado ningún piso como favorito.</span>
+        <h3 class="font-weight-light">No se han seleccionado pisos como favoritos.</h3>
       </div>
       <v-row v-if="favoritos.length > 0">
-        <v-col cols="3" v-for="f in favoritos" :key="f.idPiso">
+        <v-col cols="4" v-for="f in favoritos" :key="f.idPiso">
           <PisoCard :piso="f"></PisoCard>
         </v-col>
       </v-row>

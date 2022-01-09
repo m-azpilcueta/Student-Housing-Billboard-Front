@@ -3,7 +3,7 @@
     <!-- Notificaciones usando vue-notification -->
     <notifications :max="3" :width="400" position="top center" />
 
-    <v-app-bar app color="primary" dark>
+    <v-app-bar app color="light-blue darken-1" dark>
       <v-toolbar-title>
         <router-link to="/" v-slot="{ navigate }" custom>
           <span @click="navigate" class="pointer">UniPiso</span>
@@ -17,7 +17,7 @@
           <v-icon left>mdi-domain</v-icon>
           pisos
         </v-btn>
-        <v-btn active-class="hide-active" text to="/" v-if="isLogged">
+        <v-btn active-class="hide-active" text :to="{ name: 'Favorites', params: { id: user.id } }" v-if="isLogged">
           <v-icon left>mdi-heart</v-icon>
           Favoritos
         </v-btn>
@@ -30,7 +30,9 @@
           Registrarse
         </v-btn>
 
-        <v-btn active-class="hide-active" :to="{ name: 'UsersProfile', params: { id: user.id } }" color="primary" v-if="isLogged"> <v-icon>mdi-account</v-icon> Mi perfil </v-btn>
+        <v-btn active-class="hide-active" :to="{ name: 'UsersProfile', params: { id: user.id } }" color="light-blue darken-1" v-if="isLogged">
+          <v-icon>mdi-account</v-icon> Mi perfil
+        </v-btn>
 
         <v-btn active-class="hide-active" text to="/login" v-if="!isLogged">
           <v-icon left>mdi-login</v-icon>

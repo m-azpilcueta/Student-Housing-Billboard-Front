@@ -10,7 +10,7 @@
       </v-card-title>
     </router-link>
     <v-card-text class="d-flex align-center">
-      <v-icon class="mr-2" size="48">mdi-account-circle</v-icon>
+      <v-icon class="mr-2" size="48" color="light-blue lighten-2">mdi-account-circle</v-icon>
       <div class="d-flex flex-column">
         <b>Estudio del anunciante:</b>
         {{ piso.anunciante.estudio.nombreEstudio }}
@@ -20,12 +20,12 @@
     </v-card-text>
     <div class="d-flex align-center justify-space-between">
       <v-card-subtitle class="d-flex align-center">
-        <v-icon class="mr-1" color="red darken-2">mdi-map-marker</v-icon>
+        <v-icon class="mr-1" color="grey darken-3">mdi-map-marker</v-icon>
         <span
           ><b>{{ piso.localidad }}, {{ piso.provincia }}</b></span
         >
       </v-card-subtitle>
-      <v-card-title>{{ piso.importe }}€</v-card-title>
+      <v-card-title class="light-blue--text">{{ piso.importe }}€</v-card-title>
     </div>
     <div class="no-disp d-flex justify-center align-center" v-if="!isDisponible">
       <v-card-title>Piso no disponible</v-card-title>

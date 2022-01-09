@@ -1,8 +1,8 @@
 <template>
-  <v-container>
+  <v-container class="ma-0">
     <v-row>
-      <v-col cols="12">
-        <v-card class="d-flex align-center pl-5 pr-5">
+      <v-col cols="12" offset="4">
+        <v-card class="d-flex align-center" elevation="0" max-width="700" align>
           <v-icon>mdi-sort</v-icon>
           <v-card-title>Ordenar por:</v-card-title>
           <v-select :items="ordenacion" @input="cargarPisosFiltrados()" v-model="sort" item-value="value" placeholder="Seleccionar ordenación"></v-select>
@@ -45,13 +45,13 @@
           <v-checkbox class="pr-4 pl-4" v-model="filtros.disp" label="Disponible"></v-checkbox>
           <v-checkbox class="pr-4 pl-4 mt-0" v-model="filtros.nodisp" label="No disponible"></v-checkbox>
           <div class="d-flex justify-center align-center flex-nowrap">
-            <v-btn color="primary" class="mr-1" @click="aplicarFiltros()">Aplicar filtros</v-btn>
+            <v-btn color="light-blue" text elevation="1" class="mr-1" @click="aplicarFiltros()">Aplicar filtros</v-btn>
             <v-btn @click="resetFiltros()" class="ml-1">Resetear filtros</v-btn>
           </div>
         </v-card>
       </v-col>
       <v-col cols="12" sm="6" md="8" v-if="pisos.length === 0" class="d-flex align-center justify-center">
-        <span>No se han encontrado pisos.</span>
+        <h3 class="font-weight-light">No se han encontrado pisos.</h3>
       </v-col>
       <v-col cols="12" sm="6" md="4" v-for="piso in pisos" :key="piso.idPiso">
         <PisoCard :piso="piso"></PisoCard>

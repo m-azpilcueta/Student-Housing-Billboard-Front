@@ -1,6 +1,7 @@
 //import UsersList from "./UsersList";
 import Register from "@/components/Register";
 import UsersProfile from "./UsersProfile";
+import Favoritos from "@/entities/piso/Favoritos";
 
 const routes = [
   /* {
@@ -13,13 +14,16 @@ const routes = [
     path: "/users/:id",
     name: "UsersProfile",
     component: UsersProfile,
-    meta: { public: true },
   },
   {
     name: "UsersUpdate",
     path: "/users/:id/update",
     component: Register,
-    meta: { public: true },
+  },
+  {
+    name: "Favorites",
+    path: "/users/:id/favorites",
+    component: Favoritos,
   },
 ];
 

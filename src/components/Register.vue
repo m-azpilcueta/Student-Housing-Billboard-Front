@@ -3,7 +3,7 @@
     <v-flex xs12 sm8 md6>
       <v-form ref="form" @submit.prevent="userRegister">
         <v-card class="pa-4">
-          <v-card-title>Registrar usuario</v-card-title>
+          <v-card-title>{{ cambiarBotonRegistrarEditar }} usuario</v-card-title>
           <v-card-text>
             <v-text-field v-model="user.nombre" label="Nombre" name="nombre" prepend-icon="mdi-account" type="text" :rules="requiredField"></v-text-field>
             <v-text-field v-model="user.login" label="Login" name="login" prepend-icon="mdi-account-circle" type="text" :rules="requiredField"></v-text-field>
@@ -47,7 +47,7 @@
 
           <v-card-actions class="d-flex justify-space-around">
             <v-btn color="error" @click="back()"> Cancelar <v-icon right dark> mdi-close-circle-outline </v-icon></v-btn>
-            <v-btn type="submit" color="primary"> Registrar <v-icon right dark> mdi-check-circle-outline </v-icon></v-btn>
+            <v-btn type="submit" color="primary"> {{ cambiarBotonRegistrarEditar }} <v-icon right dark> mdi-check-circle-outline </v-icon></v-btn>
           </v-card-actions>
         </v-card>
       </v-form>
@@ -70,6 +70,15 @@ export default {
       filtrados: [],
       requiredField: [(v) => !!v || "Este campo es obligatorio"],
     };
+  },
+  computed: {
+    cambiarBotonRegistrarEditar() {
+      if (this.$route.params.id) {
+        return "Editar";
+      } else {
+        return "Registrar";
+      }
+    },
   },
   async created() {
     this.universidades = await UniversidadRepository.findAllUniversidades();

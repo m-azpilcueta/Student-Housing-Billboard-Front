@@ -21,7 +21,7 @@
           </div>
           <div class="d-flex align-center mb-4 mt-4 borde">
             <div class="d-flex flex-column mr-5">
-              <v-icon size="50">mdi-account-circle</v-icon>
+              <v-icon size="50" color="light-blue lighten-2">mdi-account-circle</v-icon>
               <span
                 ><b>{{ piso.anunciante.nombre }}</b></span
               >
@@ -54,7 +54,7 @@
           >
           <br />
           <div class="d-flex mt-4">
-            <v-icon size="36" color="red darken-2">mdi-map-marker</v-icon>
+            <v-icon size="36" color="grey darken-2">mdi-map-marker</v-icon>
             <div class="d-flex flex-column ml-2">
               <span>{{ piso.calle }} {{ piso.numero }}, {{ piso.pisoLetra }}</span>
               <span>{{ piso.codigoPostal }} {{ piso.localidad }}, {{ piso.provincia }}</span>
@@ -84,7 +84,7 @@
         </div>
       </div>
       <div v-if="isAdmin" class="d-flex mt-1">
-        <v-btn color="red darken-2" class="error mt-2 flex-grow-1" @click="borrarPiso()">Eliminar piso</v-btn>
+        <v-btn class="error mt-2 flex-grow-1" @click="borrarPiso()">Eliminar piso</v-btn>
       </div>
     </v-card>
   </v-container>
@@ -124,7 +124,7 @@ export default {
   },
   computed: {
     colorDisponible() {
-      if (this.piso.disponible) return "primary flex-grow-1";
+      if (this.piso.disponible) return "light-blue lighten-2 flex-grow-1";
       else return "red darken-2 flex-grow-1";
     },
     setDisponible() {
