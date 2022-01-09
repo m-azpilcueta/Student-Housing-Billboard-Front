@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-card class="mx-auto my-5" max-width="800">
+    <v-card class="mx-auto my-5" max-width="800" v-if="user">
       <div class="d-flex">
         <div class="d-flex flex-column mx-10 my-7">
           <v-icon size="150" color="light-blue">mdi-account-circle</v-icon>
@@ -32,14 +32,23 @@
       </div>
     </v-card>
 
-    <h2 class="font-weight-regular">Lista de Pisos publicados</h2>
-    <v-col cols="12" sm="6" md="8" v-if="pisos.length === 0" class="d-flex align-center justify-center">
+    <div class="d-flex">
+      <h2 class="font-weight-regular">Lista de pisos publicados</h2>
+      <v-btn class="primary ml-5">Publicar piso</v-btn>
+    </div>
+    <div v-if="pisos.length === 0" class="d-flex align-center justify-center mt-5">
       <span>No se han encontrado pisos.</span>
-    </v-col>
+    </div>
 
-    <v-col cols="12" sm="6" md="4" v-for="piso in pisos" :key="piso.idPiso">
-      <PisoCard :piso="piso"></PisoCard>
-    </v-col>
+    <v-row v-if="pisos.length > 0" class="mt-5">
+      <v-col cols="12" sm="6" md="4" v-for="piso in pisos" :key="piso.idPiso">
+        <PisoCard :piso="piso"></PisoCard>
+        <div class="d-flex justify-space-around mt-2">
+          <v-btn class="flex-grow-1 mr-1 warning">Editar</v-btn>
+          <v-btn class="red darken-2 error flex-grow-1 ml-1">Eliminar</v-btn>
+        </div>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -48,10 +57,10 @@ import UserRepository from "@/repositories/UserRepository";
 import PisoCard from "@/entities/piso/PisoCard";
 
 export default {
-  name: "UserProfile",
+  name: "UsersProfile",
   data() {
     return {
-      user: {},
+      user: null,
       pisos: [],
     };
   },
