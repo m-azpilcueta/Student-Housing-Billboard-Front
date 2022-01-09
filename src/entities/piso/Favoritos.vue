@@ -31,8 +31,16 @@ export default {
   },
   methods: {
     async cargarUsuario() {
-      this.usuario = await accountRepository.getAccount();
-      this.favoritos = this.usuario.favoritos;
+      try {
+        this.usuario = await accountRepository.getAccount();
+      } catch (err) {
+        this.$notify({
+          text: err.response.data.message,
+          type: "error",
+        });
+      } finally {
+        this.favoritos = this.usuario.favoritos;
+      }
     },
   },
 };

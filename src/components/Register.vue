@@ -93,7 +93,7 @@ export default {
       }
       try {
         await AccountRepository.registerAccount(this.user);
-        this.$router.replace({
+        await this.$router.replace({
           name: "Login",
         });
       } catch (err) {
