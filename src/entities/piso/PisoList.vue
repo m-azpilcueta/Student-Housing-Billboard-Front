@@ -120,7 +120,12 @@ export default {
   components: { PisoCard },
   methods: {
     async cargarPisosFiltrados() {
-      this.pisos = await PisoRepository.findAll(this.query, this.sort);
+      this.pisos = await PisoRepository.findAll(this.query, this.sort).catch((err) => {
+        this.$notify({
+          text: err.response.data.message,
+          type: "error",
+        });
+      });
     },
     async aplicarFiltros() {
       this.query = "";

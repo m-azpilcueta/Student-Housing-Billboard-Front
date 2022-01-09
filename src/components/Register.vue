@@ -28,9 +28,6 @@
               type="text"
               :rules="requiredField"
             ></v-select>
-            <!--
-            <v-autocomplete clearable @click="cargarEstudiosByUniversidad" :disabled="comprobarUniversidad" v-model="estudioPrueba" :items="filtrados" item-text="nombreEstudio" prepend-icon="mdi-book" return-object label="Estudio escrito" placeholder="Empieza a escribir para buscar" type="text" :rules="requiredField"> </v-autocomplete>
-            -->
             <v-combobox
               v-model="user.estudio"
               :items="filtrados"
@@ -85,7 +82,14 @@ export default {
       await EstudioRepository.crearEstudio({
         nombreEstudio: this.user.estudio,
         universidad: this.user.universidad,
-      }).then(async () => (this.filtrados = await UniversidadRepository.findAllEstudiosByUniversidad(this.user.universidad.idUniversidad)));
+      })
+        .then(async () => (this.filtrados = await UniversidadRepository.findAllEstudiosByUniversidad(this.user.universidad.idUniversidad)))
+        .catch((err) => {
+          this.$notify({
+            text: err.response.data.message,
+            type: "error",
+          });
+        });
     },
     async userRegister() {
       if (!this.$refs.form.validate()) {

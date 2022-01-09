@@ -130,7 +130,13 @@ export default {
     async guardarImagen() {
       await pisoRepository
         .subirImagen(this.$route.params.id, this.$refs.hidImagen.files[0])
-        .then(async () => (this.imagenes = await pisoRepository.cargarImagenes(this.$route.params.id)));
+        .then(async () => (this.imagenes = await pisoRepository.cargarImagenes(this.$route.params.id)))
+        .catch((err) => {
+          this.$notify({
+            text: err.response.data.message,
+            type: "error",
+          });
+        });
     },
     fotoCargada(i) {
       return `http://localhost:8080/api/pisos/${this.piso.idPiso}/imagenes/${i.idImagen}`;
@@ -157,10 +163,18 @@ export default {
       this.portada = `http://localhost:8080/api/pisos/${this.piso.idPiso}/imagenes/${i.idImagen}`;
     },
     async borrarImagen(i) {
-      await pisoRepository.borrarImagen(this.piso.idPiso, i.idImagen).then(async () => {
-        if (i.portada) this.portada = require("@/assets/placeholder.png");
-        this.imagenes = await pisoRepository.cargarImagenes(this.$route.params.id);
-      });
+      await pisoRepository
+        .borrarImagen(this.piso.idPiso, i.idImagen)
+        .then(async () => {
+          if (i.portada) this.portada = require("@/assets/placeholder.png");
+          this.imagenes = await pisoRepository.cargarImagenes(this.$route.params.id);
+        })
+        .catch((err) => {
+          this.$notify({
+            text: err.response.data.message,
+            type: "error",
+          });
+        });
     },
     back() {
       this.$router.go(-1);

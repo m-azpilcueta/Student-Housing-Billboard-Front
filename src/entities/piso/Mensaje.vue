@@ -84,12 +84,10 @@ export default {
       return this.user.id === m.usuario.id;
     },
     cambiarModifPregunta() {
-      if (this.modifPregunta) this.modifPregunta = false;
-      else this.modifPregunta = true;
+      this.modifPregunta = !this.modifPregunta;
     },
     cambiarModifRespuesta() {
-      if (this.modifRespuesta) this.modifRespuesta = false;
-      else this.modifRespuesta = true;
+      this.modifRespuesta = !this.modifRespuesta;
     },
     async borrarMensaje(valor, idPregunta) {
       await pisoRepository.borrarPregunta(this.piso.idPiso, idPregunta);
