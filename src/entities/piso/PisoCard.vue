@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-img :src="cargarPortada(piso)"></v-img>
-    <v-icon @click="gestionarFavs()" size="25" class="favoritos" color="red darken-2" v-if="isLogged & isDisponible">{{ favSelector }}</v-icon>
+    <v-icon @click="gestionarFavs()" size="25" class="favoritos" color="red darken-2" v-if="isLogged & isDisponible & !isMismoUsuario">{{ favSelector }}</v-icon>
     <v-card-title>
       {{ piso.nombre }}
     </v-card-title>
@@ -52,6 +52,9 @@ export default {
     },
     isDisponible() {
       return this.piso.disponible;
+    },
+    isMismoUsuario() {
+      return store.state.user.id === this.piso.anunciante.id;
     },
     isFav() {
       let j = this.favoritos;

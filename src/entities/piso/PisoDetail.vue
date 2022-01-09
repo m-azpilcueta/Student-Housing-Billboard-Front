@@ -14,7 +14,7 @@
         </v-col>
         <v-col cols="6">
           <div class="d-flex">
-            <span id="disponible" class="primary flex-grow-1">{{ setDisponible }}</span>
+            <span id="disponible" :class="colorDisponible">{{ setDisponible }}</span>
             <v-icon @click="gestionarFavs()" size="35" class="pointer ml-2" v-if="isLogged & isDisponible & !isMismoUsuario & !isAdmin" color="red darken-2">{{
               favSelector
             }}</v-icon>
@@ -88,7 +88,7 @@
         </div>
       </div>
       <div v-if="isAdmin" class="d-flex mt-1">
-        <v-btn color="error" class="mt-2 flex-grow-1" @click="borrarPiso()">Eliminar piso</v-btn>
+        <v-btn color="red darken-2" class="error mt-2 flex-grow-1" @click="borrarPiso()">Eliminar piso</v-btn>
       </div>
     </v-card>
   </v-container>
@@ -127,6 +127,10 @@ export default {
     });
   },
   computed: {
+    colorDisponible() {
+      if (this.piso.disponible) return "primary flex-grow-1";
+      else return "red darken-2 flex-grow-1";
+    },
     setDisponible() {
       if (this.piso.disponible) return "Disponible";
       else return "No disponible";
