@@ -14,8 +14,10 @@
         </v-col>
         <v-col cols="6">
           <div class="d-flex">
-            <span id="disponible" class="primary flex-grow-1">{{ setDisponible }}</span>
-            <v-icon @click="gestionarFavs()" size="35" class="pointer ml-2" v-if="isLogged & isDisponible & !isMismoUsuario" color="red darken-2">{{ favSelector }}</v-icon>
+            <span id="disponible" :class="colorDisponible">{{ setDisponible }}</span>
+            <v-icon @click="gestionarFavs()" size="35" class="pointer ml-2" v-if="isLogged & isDisponible & !isMismoUsuario & !isAdmin" color="red darken-2">{{
+              favSelector
+            }}</v-icon>
           </div>
           <div class="d-flex align-center mb-4 mt-4 borde">
             <div class="d-flex flex-column mr-5">
@@ -25,10 +27,22 @@
               >
             </div>
             <div class="d-flex flex-column">
-              <span>{{ piso.anunciante.email }}</span>
-              <span>{{ piso.anunciante.telefonoContacto }}</span>
-              <span>{{ piso.anunciante.estudio.nombreEstudio }}</span>
-              <span>{{ piso.anunciante.estudio.universidad.nombreUniversidad }}</span>
+              <div class="d-flex">
+                <v-icon size="20" class="mr-1">mdi-email</v-icon>
+                <span>{{ piso.anunciante.email }}</span>
+              </div>
+              <div class="d-flex">
+                <v-icon size="20" class="mr-1">mdi-phone</v-icon>
+                <span>{{ piso.anunciante.telefonoContacto }}</span>
+              </div>
+              <div class="d-flex">
+                <v-icon size="20" class="mr-1">mdi-book</v-icon>
+                <span>{{ piso.anunciante.estudio.nombreEstudio }}</span>
+              </div>
+              <div class="d-flex">
+                <v-icon size="20" class="mr-1">mdi-home-modern</v-icon>
+                <span>{{ piso.anunciante.estudio.universidad.nombreUniversidad }}</span>
+              </div>
             </div>
           </div>
           <span
@@ -57,30 +71,24 @@
       </v-row>
       <div class="borde">
         <span><b>Preguntas y respuestas</b></span>
-        <div v-if="mensajes.length == 0" class="d-flex justify-center align-center mt-2 mb-4">
+        <div v-if="mensajes.length === 0" class="d-flex justify-center align-center mt-2 mb-4">
           <span>Nadie ha realizado preguntas todavía.</span>
           <span v-if="!isLogged" class="ml-1">Debes iniciar sesión para realizar preguntas.</span>
         </div>
         <div v-for="m in mensajes" :key="m.id" class="d-flex flex-column">
-          <div class="d-flex align-start">
-            <v-icon size="40" class="mr-1">mdi-account-circle</v-icon>
-            <div class="d-flex flex-column">
-              <span
-                ><b>{{ m.usuario.nombre }}</b> pregunta:</span
-              >
-              <span>{{ m.texto }}</span>
-            </div>
-          </div>
-          <span v-if="m.respuesta"><b>Respuesta del anunciante: </b>{{ m.respuesta.texto }}</span>
+          <Mensaje :mensaje="m" :piso="piso"></Mensaje>
           <div v-if="isLogged & isMismoUsuario & !m.respuesta" class="d-flex align-center mt-2 mb-4">
             <input v-model="nuevaRespuesta" class="texto-pregunta" placeholder="Escribe una respuesta" />
-            <v-btn @click="responder(m.id)" class="ml-2" :disabled="nuevaRespuesta.length === 0">Publicar respuesta</v-btn>
+            <v-btn color="primary" @click="responder(m.id)" class="ml-2" :disabled="nuevaRespuesta.length === 0">Publicar respuesta</v-btn>
           </div>
         </div>
-        <div v-if="isLogged & !isMismoUsuario" class="d-flex align-center mt-2 mb-4">
+        <div v-if="isLogged & !isMismoUsuario & !isAdmin" class="d-flex align-center mt-2 mb-4">
           <input v-model="nuevaPregunta" class="texto-pregunta" placeholder="Escribe una pregunta" />
-          <v-btn @click="preguntar()" class="ml-2" :disabled="nuevaPregunta.length === 0">Publicar pregunta</v-btn>
+          <v-btn color="primary" @click="preguntar()" class="ml-2" :disabled="nuevaPregunta.length === 0">Publicar pregunta</v-btn>
         </div>
+      </div>
+      <div v-if="isAdmin" class="d-flex mt-1">
+        <v-btn color="red darken-2" class="error mt-2 flex-grow-1" @click="borrarPiso()">Eliminar piso</v-btn>
       </div>
     </v-card>
   </v-container>
@@ -91,8 +99,10 @@ import moment from "moment";
 import pisoRepository from "@/repositories/PisoRepository";
 import store from "@/common/store";
 import userRepository from "@/repositories/UserRepository";
+import Mensaje from "@/entities/piso/Mensaje";
 
 export default {
+  components: { Mensaje },
   data() {
     return {
       piso: null,
@@ -117,6 +127,10 @@ export default {
     });
   },
   computed: {
+    colorDisponible() {
+      if (this.piso.disponible) return "primary flex-grow-1";
+      else return "red darken-2 flex-grow-1";
+    },
     setDisponible() {
       if (this.piso.disponible) return "Disponible";
       else return "No disponible";
@@ -146,6 +160,9 @@ export default {
     },
   },
   methods: {
+    isAutorPregunta(m) {
+      return this.user.id === m.usuario.id;
+    },
     async cargarPiso() {
       this.piso = await pisoRepository.findById(this.$route.params.id);
     },
@@ -174,9 +191,22 @@ export default {
       this.nuevaPregunta = "";
     },
     async responder(idPregunta) {
-      let m = await pisoRepository.responder(this.piso.idPiso, idPregunta, { texto: this.nuevaRespuesta });
-      this.mensajes = m.mensajes;
+      let x = await pisoRepository.responder(this.piso.idPiso, idPregunta, { texto: this.nuevaRespuesta });
+      this.mensajes = x.mensajes;
       this.nuevaRespuesta = "";
+    },
+    async borrarPiso() {
+      try {
+        await pisoRepository.borrarPiso(this.piso.idPiso);
+        await this.$router.replace({
+          name: "PisoList",
+        });
+      } catch (e) {
+        this.$notify({
+          text: e.response.data.message,
+          type: "error",
+        });
+      }
     },
   },
 };

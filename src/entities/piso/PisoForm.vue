@@ -42,7 +42,7 @@
               </v-row>
               <v-select v-model="piso.provincia" label="Provincia" :items="provincias" :rules="requiredField"></v-select>
               <v-select v-model="piso.localidad" label="Localidad" :items="localidades" :rules="requiredField"></v-select>
-              <v-textarea v-model="piso.descripcion" label="Decripción" rows="7" :rules="requiredField"></v-textarea>
+              <v-textarea counter v-model="piso.descripcion" label="Decripción" rows="7" :rules="bodyRules"></v-textarea>
               <div class="d-flex align-center">
                 <span class="mr-4 radio-text">Disponible:</span>
                 <v-radio-group v-model="piso.disponible" row mandatory>
@@ -114,6 +114,10 @@ export default {
     setPageName() {
       if (this.isEdit) return "Editar piso";
       else return "Publicar piso";
+    },
+    bodyRules() {
+      const reglas = [(v) => !!v || "Este campo es obligatorio", (v) => (v || "").length <= 500 || `El número máximo de caracteres es 500`];
+      return reglas;
     },
   },
   mounted() {
