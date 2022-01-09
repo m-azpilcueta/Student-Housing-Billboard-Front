@@ -54,6 +54,11 @@ export default {
     const response = await HTTP.post(`${resource}/${idPiso}/preguntas/${idPregunta}`, respuesta);
     return response.data;
   },
+  async modificarPregunta() {},
+  async borrarPregunta(idPiso, idMensaje) {
+    const response = await HTTP.delete(`${resource}/${idPiso}/preguntas/${idMensaje}`);
+    return response.data;
+  },
   async borrarPiso(idPiso) {
     const response = await HTTP.delete(`${resource}/${idPiso}`);
     return response.data;

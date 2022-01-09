@@ -71,29 +71,20 @@
       </v-row>
       <div class="borde">
         <span><b>Preguntas y respuestas</b></span>
-        <div v-if="mensajes.length == 0" class="d-flex justify-center align-center mt-2 mb-4">
+        <div v-if="mensajes.length === 0" class="d-flex justify-center align-center mt-2 mb-4">
           <span>Nadie ha realizado preguntas todavía.</span>
           <span v-if="!isLogged" class="ml-1">Debes iniciar sesión para realizar preguntas.</span>
         </div>
         <div v-for="m in mensajes" :key="m.id" class="d-flex flex-column">
-          <div class="d-flex align-start">
-            <v-icon size="40" class="mr-1">mdi-account-circle</v-icon>
-            <div class="d-flex flex-column">
-              <span
-                ><b>{{ m.usuario.nombre }}</b> pregunta:</span
-              >
-              <span>{{ m.texto }}</span>
-            </div>
-          </div>
-          <span v-if="m.respuesta"><b>Respuesta del anunciante: </b>{{ m.respuesta.texto }}</span>
+          <Mensaje :mensaje="m" :piso="piso"></Mensaje>
           <div v-if="isLogged & isMismoUsuario & !m.respuesta" class="d-flex align-center mt-2 mb-4">
             <input v-model="nuevaRespuesta" class="texto-pregunta" placeholder="Escribe una respuesta" />
-            <v-btn @click="responder(m.id)" class="ml-2" :disabled="nuevaRespuesta.length === 0">Publicar respuesta</v-btn>
+            <v-btn color="primary" @click="responder(m.id)" class="ml-2" :disabled="nuevaRespuesta.length === 0">Publicar respuesta</v-btn>
           </div>
         </div>
         <div v-if="isLogged & !isMismoUsuario & !isAdmin" class="d-flex align-center mt-2 mb-4">
           <input v-model="nuevaPregunta" class="texto-pregunta" placeholder="Escribe una pregunta" />
-          <v-btn @click="preguntar()" class="ml-2" :disabled="nuevaPregunta.length === 0">Publicar pregunta</v-btn>
+          <v-btn color="primary" @click="preguntar()" class="ml-2" :disabled="nuevaPregunta.length === 0">Publicar pregunta</v-btn>
         </div>
       </div>
       <div v-if="isAdmin" class="d-flex mt-1">
@@ -108,8 +99,10 @@ import moment from "moment";
 import pisoRepository from "@/repositories/PisoRepository";
 import store from "@/common/store";
 import userRepository from "@/repositories/UserRepository";
+import Mensaje from "@/entities/piso/Mensaje";
 
 export default {
+  components: { Mensaje },
   data() {
     return {
       piso: null,
@@ -163,6 +156,9 @@ export default {
     },
   },
   methods: {
+    isAutorPregunta(m) {
+      return this.user.id === m.usuario.id;
+    },
     async cargarPiso() {
       this.piso = await pisoRepository.findById(this.$route.params.id);
     },
@@ -191,14 +187,14 @@ export default {
       this.nuevaPregunta = "";
     },
     async responder(idPregunta) {
-      let m = await pisoRepository.responder(this.piso.idPiso, idPregunta, { texto: this.nuevaRespuesta });
-      this.mensajes = m.mensajes;
+      let x = await pisoRepository.responder(this.piso.idPiso, idPregunta, { texto: this.nuevaRespuesta });
+      this.mensajes = x.mensajes;
       this.nuevaRespuesta = "";
     },
     async borrarPiso() {
       try {
         await pisoRepository.borrarPiso(this.piso.idPiso);
-        this.$router.replace({
+        await this.$router.replace({
           name: "PisoList",
         });
       } catch (e) {
