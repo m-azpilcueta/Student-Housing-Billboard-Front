@@ -33,7 +33,7 @@ const routes = [
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes: routes.concat(pisoRouter, usersRouter),
+  routes: routes.concat(pisoRouter).concat(usersRouter),
 });
 
 router.beforeEach((to, from, next) => {
@@ -74,7 +74,7 @@ router.beforeEach((to, from, next) => {
       // página pública
       if (userIsLogged && to.meta.isLoginPage) {
         // si estamos logueados no hace falta volver a mostrar el login
-        next({ name: "Home", replace: true });
+        next({ name: "PisoList", replace: true });
       } else {
         next();
       }

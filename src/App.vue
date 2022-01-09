@@ -29,7 +29,9 @@
           <v-icon left>mdi-account-plus</v-icon>
           Registrarse
         </v-btn>
-        <v-btn text active-class="hide-active" :to="{ name: 'UsersProfile', params: { id: user.id } }" v-if="isLogged"> <v-icon left>mdi-account</v-icon> Mi perfil </v-btn>
+        <v-btn text active-class="hide-active" :to="{ name: 'UsersProfile', params: { id: user.id } }" v-if="isLogged & !isAdmin">
+          <v-icon left>mdi-account</v-icon> Mi perfil
+        </v-btn>
         <v-btn active-class="hide-active" text to="/login" v-if="!isLogged">
           <v-icon left>mdi-login</v-icon>
           Iniciar sesión
