@@ -1,13 +1,14 @@
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="12" class="text-center">
-        <h1>Users List</h1>
-      </v-col>
-      <v-col cols="12" sm="4" lg="3" v-for="user in users" :key="user.id">
-        <UsersCard :user="user"></UsersCard>
-      </v-col>
-    </v-row>
+    <v-card class="pa-4">
+      <v-card-title>Lista de usuarios</v-card-title>
+      <v-card-text v-if="users.length === 0">No hay usuarios registrados.</v-card-text>
+      <v-row v-if="users.length > 0">
+        <v-col cols="4" v-for="u in users" :key="u.id">
+          <UsersCard :user="u"></UsersCard>
+        </v-col>
+      </v-row>
+    </v-card>
   </v-container>
 </template>
 
@@ -22,8 +23,18 @@ export default {
     };
   },
   components: { UsersCard },
-  async mounted() {
-    this.users = await UserRepository.findAll();
+  mounted() {
+    this.cargarUsuarios();
+  },
+  methods: {
+    async cargarUsuarios() {
+      this.users = await UserRepository.findAll().catch((err) => {
+        this.$notify({
+          text: err.response.data.message,
+          type: "error",
+        });
+      });
+    },
   },
 };
 </script>
