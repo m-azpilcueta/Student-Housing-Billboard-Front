@@ -26,4 +26,16 @@ export default {
     const response = await HTTP.delete(`${resource}/${idUser}/favoritos/${idPiso}`);
     return response.data;
   },
+  async borrarUsuario(idUser) {
+    const response = await HTTP.delete(`${resource}/${idUser}`);
+    return response.data;
+  },
+  async desactivarUsuario(idUser) {
+    const response = await HTTP.put(`${resource}/${idUser}/desactivate`);
+    return response.data;
+  },
+  async activarUsuario(idUser) {
+    const response = await HTTP.put(`${resource}/${idUser}/activate`);
+    return response.data;
+  },
 };

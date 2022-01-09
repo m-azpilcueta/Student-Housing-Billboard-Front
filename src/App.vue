@@ -21,19 +21,21 @@
           <v-icon left>mdi-heart</v-icon>
           Favoritos
         </v-btn>
-        <v-btn active-class="hide-active" text to="/login" v-if="isLogged & isAdmin">
-          <v-icon left>mdi-account</v-icon>
+        <v-btn text to="/users" v-if="isAdmin">
+          <v-icon left>mdi-account-group</v-icon>
           Usuarios
         </v-btn>
         <v-btn active-class="hide-active" text to="/register" v-if="!isLogged">
           <v-icon left>mdi-account-plus</v-icon>
           Registrarse
         </v-btn>
-
+        <v-btn text to="/users" v-if="isAdmin">
+          <v-icon left>mdi-account-group</v-icon>
+          Usuarios
+        </v-btn>
         <v-btn active-class="hide-active" :to="{ name: 'UsersProfile', params: { id: user.id } }" color="light-blue darken-1" v-if="isLogged">
           <v-icon>mdi-account</v-icon> Mi perfil
         </v-btn>
-
         <v-btn active-class="hide-active" text to="/login" v-if="!isLogged">
           <v-icon left>mdi-login</v-icon>
           Iniciar sesión
