@@ -2,13 +2,13 @@
   <div class="mb-4" v-if="usuario">
     <v-row class="d-flex flex-column flex-sm-row">
       <v-col class="d-flex justify-center align-end">
-        <v-icon size="125">mdi-account-circle</v-icon>
+        <v-icon color="light-blue lighten-2" size="125">mdi-account-circle</v-icon>
       </v-col>
       <v-col class="d-flex flex-column align-center align-sm-start">
         <h2>{{ usuario.login }}</h2>
         <p><strong>Activo: </strong>{{ convertirBool(usuario.active) }}</p>
         <div v-if="!isMismoUsuario" class="d-flex flex-column justify-center">
-          <v-btn v-if="!usuario.active" small class="primary mb-2" @click="desbanearUsuario(usuario.id)">Desbanear</v-btn>
+          <v-btn v-if="!usuario.active" small color="light-blue lighten-2" class="white--text mb-2" @click="desbanearUsuario(usuario.id)">Desbanear</v-btn>
           <v-btn v-if="usuario.active" small class="warning mb-2" @click="banearUsuario(usuario.id)">Banear</v-btn>
           <v-btn small class="error" @click="borrarUsuario(usuario.id)">Eliminar</v-btn>
         </div>

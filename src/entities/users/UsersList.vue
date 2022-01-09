@@ -3,7 +3,7 @@
     <v-card class="pa-4">
       <v-card-title>Lista de usuarios</v-card-title>
       <v-card-text v-if="users.length === 0">No hay usuarios registrados.</v-card-text>
-      <v-row v-if="users.length > 0">
+      <v-row v-if="users.length > 0" class="align-center">
         <v-col cols="4" v-for="u in users" :key="u.id">
           <UsersCard :user="u"></UsersCard>
         </v-col>

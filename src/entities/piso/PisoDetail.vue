@@ -22,25 +22,25 @@
           <div class="d-flex align-center mb-4 mt-4 borde">
             <div class="d-flex flex-column mr-5">
               <v-icon size="50" color="light-blue lighten-2">mdi-account-circle</v-icon>
-              <span
+              <span class="text-center"
                 ><b>{{ piso.anunciante.nombre }}</b></span
               >
             </div>
             <div class="d-flex flex-column">
               <div class="d-flex">
-                <v-icon size="20" class="mr-1">mdi-email</v-icon>
+                <v-icon color="grey darken-2" size="20" class="mr-1">mdi-email</v-icon>
                 <span>{{ piso.anunciante.email }}</span>
               </div>
               <div class="d-flex">
-                <v-icon size="20" class="mr-1">mdi-phone</v-icon>
+                <v-icon color="grey darken-2" size="20" class="mr-1">mdi-phone</v-icon>
                 <span>{{ piso.anunciante.telefonoContacto }}</span>
               </div>
               <div class="d-flex">
-                <v-icon size="20" class="mr-1">mdi-book</v-icon>
+                <v-icon color="grey darken-2" size="20" class="mr-1">mdi-book</v-icon>
                 <span>{{ piso.anunciante.estudio.nombreEstudio }}</span>
               </div>
               <div class="d-flex">
-                <v-icon size="20" class="mr-1">mdi-home-modern</v-icon>
+                <v-icon color="grey darken-2" size="20" class="mr-1">mdi-home-modern</v-icon>
                 <span>{{ piso.anunciante.estudio.universidad.nombreUniversidad }}</span>
               </div>
             </div>
@@ -80,7 +80,7 @@
         </div>
         <div v-if="isLogged & !isMismoUsuario & !isAdmin" class="d-flex align-center mt-2 mb-4">
           <input v-model="nuevaPregunta" class="texto-pregunta" placeholder="Escribe una pregunta" />
-          <v-btn color="primary" @click="preguntar()" class="ml-2" :disabled="nuevaPregunta.length === 0">Publicar pregunta</v-btn>
+          <v-btn color="light-blue lighten-2" @click="preguntar()" class="ml-2 white--text" :disabled="nuevaPregunta.length === 0">Publicar pregunta</v-btn>
         </div>
       </div>
       <div v-if="isAdmin" class="d-flex mt-1">

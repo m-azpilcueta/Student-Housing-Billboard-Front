@@ -1,7 +1,7 @@
 <template>
   <div v-if="pregunta">
     <div class="d-flex align-start">
-      <v-icon size="40" class="mr-1">mdi-account-circle</v-icon>
+      <v-icon color="light-blue lighten-2" size="40" class="mr-1">mdi-account-circle</v-icon>
       <div class="d-flex flex-column">
         <span
           ><b>{{ pregunta.usuario.nombre }}</b> pregunta:</span
@@ -15,7 +15,9 @@
     </div>
     <div v-if="modifPregunta" class="mt-2 mb-2 d-flex">
       <input v-model="pregunta.texto" class="texto-pregunta" placeholder="Escribe una pregunta" />
-      <v-btn color="primary" @click="modificarMensaje(1, pregunta.id, pregunta.texto)" class="ml-2" :disabled="pregunta.texto.length === 0">Modificar pregunta</v-btn>
+      <v-btn color="light-blue lighten-2" @click="modificarMensaje(1, pregunta.id, pregunta.texto)" class="ml-2 white--text" :disabled="pregunta.texto.length === 0"
+        >Modificar pregunta</v-btn
+      >
     </div>
     <div v-if="pregunta.respuesta" class="d-flex flex-column justify-center">
       <div class="d-flex flex-wrap">
@@ -27,14 +29,18 @@
       </div>
       <div v-if="modifRespuesta" class="mt-2 mb-2 d-flex flex-wrap">
         <input v-model="pregunta.respuesta.texto" class="texto-pregunta" placeholder="Escribe una respuesta" />
-        <v-btn color="primary" @click="modificarMensaje(2, pregunta.respuesta.id, pregunta.respuesta.texto)" class="ml-2" :disabled="pregunta.texto.length === 0"
+        <v-btn
+          color="light-blue lighten-2"
+          @click="modificarMensaje(2, pregunta.respuesta.id, pregunta.respuesta.texto)"
+          class="ml-2 white--text"
+          :disabled="pregunta.texto.length === 0"
           >Modificar respuesta</v-btn
         >
       </div>
     </div>
     <div v-if="isLogged & isMismoUsuario & !pregunta.respuesta" class="d-flex align-center mt-2 mb-4">
       <input v-model="nuevaRespuesta" class="texto-pregunta" placeholder="Escribe una respuesta" />
-      <v-btn color="primary" @click="responder(pregunta.id)" class="ml-2" :disabled="nuevaRespuesta.length === 0">Publicar respuesta</v-btn>
+      <v-btn color="light-blue lighten-2" @click="responder(pregunta.id)" class="ml-2 white--text" :disabled="nuevaRespuesta.length === 0">Publicar respuesta</v-btn>
     </div>
   </div>
 </template>

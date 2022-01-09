@@ -3,7 +3,7 @@
     <router-link :to="{ name: 'PisoDetail', params: { id: piso.idPiso } }" v-slot="{ navigate }" custom>
       <v-img @click="navigate" class="pointer" :src="cargarPortada(piso)"></v-img>
     </router-link>
-    <v-icon @click="gestionarFavs()" size="25" class="favoritos" color="red darken-2" v-if="isLogged & isDisponible & !isMismoUsuario">{{ favSelector }}</v-icon>
+    <v-icon @click="gestionarFavs()" size="25" class="favoritos" color="red darken-2" v-if="isLogged & isDisponible & !isMismoUsuario & !isAdmin">{{ favSelector }}</v-icon>
     <router-link :to="{ name: 'PisoDetail', params: { id: piso.idPiso } }" v-slot="{ navigate }" custom>
       <v-card-title @click="navigate" class="pointer">
         {{ piso.nombre }}
@@ -55,6 +55,9 @@ export default {
     },
   },
   computed: {
+    isAdmin() {
+      return store.state.user.authority === "ADMIN";
+    },
     isLogged() {
       return store.state.user.logged;
     },

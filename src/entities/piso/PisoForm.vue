@@ -53,7 +53,7 @@
             </v-card-text>
             <div class="d-flex justify-center mb-4">
               <v-btn @click="back()" class="mr-2">Cancelar</v-btn>
-              <v-btn class="ml-2" color="primary" type="submit">Publicar</v-btn>
+              <v-btn class="ml-2 white--text" color="light-blue lighten-2" type="submit">Publicar</v-btn>
             </div>
           </v-col>
           <v-col v-if="isEdit" cols="6">
@@ -69,7 +69,7 @@
             </v-row>
             <div class="d-flex align-center">
               <input @change="guardarImagen()" type="file" ref="hidImagen" class="d-none" />
-              <v-btn @click="cargarImagen()" color="primary" class="ml-4 mr-4 mt-4">Adjuntar imagen</v-btn>
+              <v-btn @click="cargarImagen()" color="light-blue lighten-2" class="ml-4 mr-4 mt-4 white--text">Adjuntar imagen</v-btn>
             </div>
           </v-col>
         </v-row>

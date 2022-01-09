@@ -3,7 +3,7 @@
     <v-card class="mx-auto my-5" max-width="800" v-if="user">
       <div class="d-flex">
         <div class="d-flex flex-column mx-10 my-7">
-          <v-icon size="150" color="light-blue">mdi-account-circle</v-icon>
+          <v-icon size="150" color="light-blue lighten-2">mdi-account-circle</v-icon>
         </div>
         <div class="d-flex flex-column my-10">
           <h3>{{ user.nombre }} - {{ user.login }}</h3>
@@ -25,7 +25,7 @@
           </div>
           <v-card-actions>
             <v-row align="center" justify="space-between">
-              <v-btn class="white--text my-5" color="blue lighten-1" :to="{ name: 'UsersUpdate' }"> Editar <v-icon right dark> mdi-pencil </v-icon></v-btn>
+              <v-btn class="white--text my-5" color="light-blue lighten-2" :to="{ name: 'UsersUpdate' }"> Editar <v-icon right dark> mdi-pencil </v-icon></v-btn>
             </v-row>
           </v-card-actions>
         </div>
@@ -46,7 +46,7 @@
         <PisoCard :piso="piso" :estudio-visible="false"></PisoCard>
         <div class="d-flex justify-space-around mt-2">
           <router-link :to="{ name: 'PisoUpdate', params: { id: piso.idPiso } }" v-slot="{ navigate }" custom>
-            <v-btn class="white--text flex-grow-1 mr-1" color="blue" @click="navigate"> Editar <v-icon right dark> mdi-pencil </v-icon></v-btn>
+            <v-btn class="white--text flex-grow-1 mr-1" color="light-blue lighten-2" @click="navigate"> Editar <v-icon right dark> mdi-pencil </v-icon></v-btn>
           </router-link>
           <v-btn class="error flex-grow-1 ml-1" @click="borrarPiso(piso.idPiso)">Eliminar<v-icon right dark> mdi-delete</v-icon></v-btn>
         </div>
