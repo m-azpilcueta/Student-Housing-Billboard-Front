@@ -82,12 +82,10 @@ export default {
       this.estudioDisabled = false;
     },
     async crearEstudio() {
-      this.filtrados.push(
-        await EstudioRepository.crearEstudio({
-          nombreEstudio: this.user.estudio,
-          universidad: this.user.universidad,
-        })
-      );
+      await EstudioRepository.crearEstudio({
+        nombreEstudio: this.user.estudio,
+        universidad: this.user.universidad,
+      }).then(async () => (this.filtrados = await UniversidadRepository.findAllEstudiosByUniversidad(this.user.universidad.idUniversidad)));
     },
     async userRegister() {
       if (!this.$refs.form.validate()) {
