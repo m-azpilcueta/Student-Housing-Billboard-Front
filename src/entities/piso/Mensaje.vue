@@ -1,36 +1,40 @@
 <template>
-  <div>
+  <div v-if="pregunta">
     <div class="d-flex align-start">
       <v-icon size="40" class="mr-1">mdi-account-circle</v-icon>
       <div class="d-flex flex-column">
         <span
-          ><b>{{ mensaje.usuario.nombre }}</b> pregunta:</span
+          ><b>{{ pregunta.usuario.nombre }}</b> pregunta:</span
         >
-        <span>{{ mensaje.texto }}</span>
-        <div v-if="isAdmin || isAutorPregunta(mensaje)" class="d-flex">
+        <span>{{ pregunta.texto }}</span>
+        <div v-if="isAdmin || isAutorPregunta(pregunta)" class="d-flex">
           <span @click="cambiarModifPregunta" class="editar mr-2 pointer"><u>Editar</u></span>
-          <span @click="borrarMensaje(mensaje.id)" class="eliminar pointer"><u>Eliminar</u></span>
+          <span @click="borrarMensaje(1, pregunta.id)" class="eliminar pointer"><u>Eliminar</u></span>
         </div>
       </div>
     </div>
     <div v-if="modifPregunta" class="mt-2 mb-2 d-flex">
-      <input v-model="mensaje.texto" class="texto-pregunta" placeholder="Escribe una pregunta" />
-      <v-btn color="primary" @click="modificarMensaje(1, mensaje.id, mensaje.texto)" class="ml-2" :disabled="mensaje.texto.length === 0">Modificar pregunta</v-btn>
+      <input v-model="pregunta.texto" class="texto-pregunta" placeholder="Escribe una pregunta" />
+      <v-btn color="primary" @click="modificarMensaje(1, pregunta.id, pregunta.texto)" class="ml-2" :disabled="pregunta.texto.length === 0">Modificar pregunta</v-btn>
     </div>
-    <div v-if="mensaje.respuesta" class="d-flex flex-column justify-center">
+    <div v-if="pregunta.respuesta" class="d-flex flex-column justify-center">
       <div class="d-flex flex-wrap">
-        <span><b>Respuesta del anunciante: </b>{{ mensaje.respuesta.texto }}</span>
+        <span><b>Respuesta del anunciante: </b>{{ pregunta.respuesta.texto }}</span>
         <div v-if="isAdmin || isMismoUsuario" class="d-flex align-center">
           <span @click="cambiarModifRespuesta()" class="editar ml-2 mr-2 pointer"><u>Editar</u></span>
-          <span @click="borrarMensaje(mensaje.respuesta.id)" class="eliminar pointer"><u>Eliminar</u></span>
+          <span @click="borrarMensaje(2, pregunta.respuesta.id)" class="eliminar pointer"><u>Eliminar</u></span>
         </div>
       </div>
       <div v-if="modifRespuesta" class="mt-2 mb-2 d-flex flex-wrap">
-        <input v-model="mensaje.respuesta.texto" class="texto-pregunta" placeholder="Escribe una respuesta" />
-        <v-btn color="primary" @click="modificarMensaje(2, mensaje.respuesta.id, mensaje.respuesta.texto)" class="ml-2" :disabled="mensaje.texto.length === 0"
+        <input v-model="pregunta.respuesta.texto" class="texto-pregunta" placeholder="Escribe una respuesta" />
+        <v-btn color="primary" @click="modificarMensaje(2, pregunta.respuesta.id, pregunta.respuesta.texto)" class="ml-2" :disabled="pregunta.texto.length === 0"
           >Modificar respuesta</v-btn
         >
       </div>
+    </div>
+    <div v-if="isLogged & isMismoUsuario & !pregunta.respuesta" class="d-flex align-center mt-2 mb-4">
+      <input v-model="nuevaRespuesta" class="texto-pregunta" placeholder="Escribe una respuesta" />
+      <v-btn color="primary" @click="responder(pregunta.id)" class="ml-2" :disabled="nuevaRespuesta.length === 0">Publicar respuesta</v-btn>
     </div>
   </div>
 </template>
@@ -42,6 +46,7 @@ import store from "@/common/store";
 export default {
   data() {
     return {
+      pregunta: this.mensaje,
       modifPregunta: false,
       modifRespuesta: false,
       nuevaRespuesta: "",
@@ -66,8 +71,15 @@ export default {
     isMismoUsuario() {
       return this.user.id === this.piso.anunciante.id;
     },
+    isLogged() {
+      return store.state.user.logged;
+    },
   },
   methods: {
+    async responder(idPregunta) {
+      this.pregunta = await pisoRepository.responder(this.piso.idPiso, idPregunta, { texto: this.nuevaRespuesta });
+      this.nuevaRespuesta = "";
+    },
     isAutorPregunta(m) {
       return this.user.id === m.usuario.id;
     },
@@ -79,9 +91,10 @@ export default {
       if (this.modifRespuesta) this.modifRespuesta = false;
       else this.modifRespuesta = true;
     },
-    async borrarMensaje(idPregunta) {
+    async borrarMensaje(valor, idPregunta) {
       await pisoRepository.borrarPregunta(this.piso.idPiso, idPregunta);
-      this.mensaje.respuesta = null;
+      if (valor === 2) this.pregunta.respuesta = null;
+      if (valor === 1) this.pregunta = null;
     },
     async modificarMensaje(valor, idMensaje, texto) {
       await pisoRepository.modificarPregunta(this.piso.idPiso, idMensaje, {

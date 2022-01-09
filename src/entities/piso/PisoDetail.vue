@@ -77,10 +77,6 @@
         </div>
         <div v-for="m in mensajes" :key="m.id" class="d-flex flex-column">
           <Mensaje :mensaje="m" :piso="piso"></Mensaje>
-          <div v-if="isLogged & isMismoUsuario & !m.respuesta" class="d-flex align-center mt-2 mb-4">
-            <input v-model="nuevaRespuesta" class="texto-pregunta" placeholder="Escribe una respuesta" />
-            <v-btn color="primary" @click="responder(m.id)" class="ml-2" :disabled="nuevaRespuesta.length === 0">Publicar respuesta</v-btn>
-          </div>
         </div>
         <div v-if="isLogged & !isMismoUsuario & !isAdmin" class="d-flex align-center mt-2 mb-4">
           <input v-model="nuevaPregunta" class="texto-pregunta" placeholder="Escribe una pregunta" />
@@ -189,11 +185,6 @@ export default {
       let m = await pisoRepository.hacerPregunta(this.piso.idPiso, { texto: this.nuevaPregunta });
       this.mensajes = m.mensajes;
       this.nuevaPregunta = "";
-    },
-    async responder(idPregunta) {
-      let x = await pisoRepository.responder(this.piso.idPiso, idPregunta, { texto: this.nuevaRespuesta });
-      this.mensajes = x.mensajes;
-      this.nuevaRespuesta = "";
     },
     async borrarPiso() {
       try {

@@ -42,7 +42,7 @@
               :disabled="estudioDisabled"
               clearable
               persistent-hint
-              hint="Si tu estudio no se encuentra en la lista, escríbelo y pulsa 'Enter' en el teclado."
+              hint="Escribe el estudio y pulsa 'Enter' en el teclado para crearlo si no existe. Posteriormente, selecciónalo."
               @keyup.enter="crearEstudio()"
             >
             </v-combobox>
