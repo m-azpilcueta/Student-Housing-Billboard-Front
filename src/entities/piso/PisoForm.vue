@@ -52,7 +52,7 @@
               </div>
             </v-card-text>
             <div class="d-flex justify-center mb-4">
-              <v-btn class="mr-2">Cancelar</v-btn>
+              <v-btn @click="back()" class="mr-2">Cancelar</v-btn>
               <v-btn class="ml-2" color="primary" type="submit">Publicar</v-btn>
             </div>
           </v-col>
@@ -162,6 +162,9 @@ export default {
         this.imagenes = await pisoRepository.cargarImagenes(this.$route.params.id);
       });
     },
+    back() {
+      this.$router.go(-1);
+    },
     async save() {
       if (!this.$refs.form.validate()) {
         return;
@@ -169,7 +172,13 @@ export default {
       try {
         let pisocopia = JSON.parse(JSON.stringify(this.piso));
         pisocopia.imagenes = [];
-        await pisoRepository.publicar(pisocopia);
+        await pisoRepository.publicar(pisocopia).then(
+          async (pisoPublicado) =>
+            await this.$router.replace({
+              name: "PisoDetail",
+              params: { id: pisoPublicado.data.idPiso },
+            })
+        );
       } catch (err) {
         this.$notify({
           text: err.response.data.message,
