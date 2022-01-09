@@ -47,7 +47,7 @@
 
           <v-card-actions class="d-flex justify-space-around">
             <v-btn color="error" @click="back()"> Cancelar <v-icon right dark> mdi-close-circle-outline </v-icon></v-btn>
-            <v-btn type="submit" color="primary"> {{ cambiarBotonRegistrarEditar }} <v-icon right dark> mdi-check-circle-outline </v-icon></v-btn>
+            <v-btn type="submit" color="light-blue lighten-2" class="white--text"> {{ cambiarBotonRegistrarEditar }} <v-icon right dark> mdi-check-circle-outline </v-icon></v-btn>
           </v-card-actions>
         </v-card>
       </v-form>

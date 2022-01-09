@@ -25,7 +25,7 @@
           </div>
           <v-card-actions>
             <v-row align="center" justify="space-between">
-              <v-btn class="white--text my-5" color="blue" :to="{ name: 'UsersUpdate' }"> Editar <v-icon right dark> mdi-pencil </v-icon></v-btn>
+              <v-btn class="white--text my-5" color="blue lighten-1" :to="{ name: 'UsersUpdate' }"> Editar <v-icon right dark> mdi-pencil </v-icon></v-btn>
             </v-row>
           </v-card-actions>
         </div>
@@ -43,7 +43,7 @@
 
     <v-row v-if="pisos.length > 0" class="mt-5">
       <v-col cols="12" sm="6" md="4" v-for="piso in pisos" :key="piso.idPiso">
-        <PisoCard :piso="piso"></PisoCard>
+        <PisoCard :piso="piso" :estudio-visible="false"></PisoCard>
         <div class="d-flex justify-space-around mt-2">
           <router-link :to="{ name: 'PisoUpdate', params: { id: piso.idPiso } }" v-slot="{ navigate }" custom>
             <v-btn class="white--text flex-grow-1 mr-1" color="blue" @click="navigate"> Editar <v-icon right dark> mdi-pencil </v-icon></v-btn>

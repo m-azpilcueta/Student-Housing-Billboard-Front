@@ -12,7 +12,7 @@
 
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn type="submit" color="primary">Iniciar sesión</v-btn>
+            <v-btn type="submit" color="light-blue lighten-2" class="white--text">Iniciar sesión</v-btn>
           </v-card-actions>
         </v-card>
       </v-form>

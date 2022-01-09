@@ -7,7 +7,7 @@
       </div>
       <v-row v-if="favoritos.length > 0">
         <v-col cols="4" v-for="f in favoritos" :key="f.idPiso">
-          <PisoCard :piso="f"></PisoCard>
+          <PisoCard :piso="f" :estudio-visible="true"></PisoCard>
         </v-col>
       </v-row>
     </v-card>

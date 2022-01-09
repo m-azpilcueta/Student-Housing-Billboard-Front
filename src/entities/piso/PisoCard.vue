@@ -9,7 +9,7 @@
         {{ piso.nombre }}
       </v-card-title>
     </router-link>
-    <v-card-text class="d-flex align-center">
+    <v-card-text v-if="estudioVisible" class="d-flex align-center">
       <v-icon class="mr-2" size="48" color="light-blue lighten-2">mdi-account-circle</v-icon>
       <div class="d-flex flex-column">
         <b>Estudio del anunciante:</b>
@@ -48,6 +48,10 @@ export default {
     piso: {
       type: Object,
       required: true,
+    },
+    estudioVisible: {
+      type: Boolean,
+      required: false,
     },
   },
   computed: {

@@ -45,7 +45,7 @@
           <v-checkbox class="pr-4 pl-4" v-model="filtros.disp" label="Disponible"></v-checkbox>
           <v-checkbox class="pr-4 pl-4 mt-0" v-model="filtros.nodisp" label="No disponible"></v-checkbox>
           <div class="d-flex justify-center align-center flex-nowrap">
-            <v-btn color="light-blue" text elevation="1" class="mr-1" @click="aplicarFiltros()">Aplicar filtros</v-btn>
+            <v-btn color="light-blue lighten-2" elevation="1" class="mr-1 white--text" @click="aplicarFiltros()">Aplicar filtros</v-btn>
             <v-btn @click="resetFiltros()" class="ml-1">Resetear filtros</v-btn>
           </div>
         </v-card>
@@ -54,7 +54,7 @@
         <h3 class="font-weight-light">No se han encontrado pisos.</h3>
       </v-col>
       <v-col cols="12" sm="6" md="4" v-for="piso in pisos" :key="piso.idPiso">
-        <PisoCard :piso="piso"></PisoCard>
+        <PisoCard :piso="piso" :estudio-visible="true"></PisoCard>
       </v-col>
     </v-row>
   </v-container>
@@ -162,5 +162,8 @@ export default {
 <style scoped>
 .radio-text {
   font-size: 16px;
+}
+.container {
+  max-width: none;
 }
 </style>

@@ -6,7 +6,7 @@
       </v-col>
       <v-col class="d-flex flex-column align-center align-sm-start">
         <h2>{{ usuario.login }}</h2>
-        <p><strong>Active: </strong>{{ usuario.active }}</p>
+        <p><strong>Activo: </strong>{{ convertirBool(usuario.active) }}</p>
         <div v-if="!isMismoUsuario" class="d-flex flex-column justify-center">
           <v-btn v-if="!usuario.active" small class="primary mb-2" @click="desbanearUsuario(usuario.id)">Desbanear</v-btn>
           <v-btn v-if="usuario.active" small class="warning mb-2" @click="banearUsuario(usuario.id)">Banear</v-btn>
@@ -40,6 +40,10 @@ export default {
     },
   },
   methods: {
+    convertirBool(valor) {
+      if (valor) return "Sí";
+      else return "No";
+    },
     async borrarUsuario(idUser) {
       await userRepository
         .borrarUsuario(idUser)
