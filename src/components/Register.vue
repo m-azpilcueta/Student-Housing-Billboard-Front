@@ -59,6 +59,7 @@
 import UniversidadRepository from "@/repositories/UniversidadRepository";
 import AccountRepository from "@/repositories/AccountRepository";
 import EstudioRepository from "@/repositories/EstudioRepository";
+import UserRepository from "@/repositories/UserRepository";
 
 export default {
   data() {
@@ -72,6 +73,12 @@ export default {
   },
   async created() {
     this.universidades = await UniversidadRepository.findAllUniversidades();
+
+    if (this.$route.params.id) {
+      this.user = await UserRepository.findOne(this.$route.params.id);
+    } else {
+      this.user = {};
+    }
   },
   methods: {
     async cargarEstudiosByUniversidad() {

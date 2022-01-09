@@ -7,10 +7,21 @@ export default {
     const response = await HTTP.get(resource);
     return response.data;
   },
+
+  async findAllPisosByAnunciante(id) {
+    const response = await HTTP.get(`${resource}/${id}/pisos`);
+    return response.data;
+  },
+
+  async findOne(id) {
+    return (await HTTP.get(`${resource}/${id}`)).data;
+  },
+
   async hacerFavorito(idUser, piso) {
     const response = await HTTP.put(`${resource}/${idUser}/favoritos`, piso);
     return response.data;
   },
+
   async quitarFavorito(idUser, idPiso) {
     const response = await HTTP.delete(`${resource}/${idUser}/favoritos/${idPiso}`);
     return response.data;
